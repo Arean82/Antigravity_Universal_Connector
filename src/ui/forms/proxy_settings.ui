@@ -47,7 +47,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PROXY SETTINGS</string>
+      <string>API PROXY &amp; GATEWAY SETTINGS</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -99,7 +99,235 @@
         <number>0</number>
        </property>
        <item>
+        <layout class="QHBoxLayout" name="layoutStatsCards">
+         <property name="spacing">
+          <number>14</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="cardProxyPort">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardProxyPort {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCardPort">
+            <item>
+             <widget class="QLabel" name="lblCardProxyPortTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Proxy Port</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valProxyPort">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #0D6EFD;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardActiveAccounts">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardActiveAccounts {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCardActive">
+            <item>
+             <widget class="QLabel" name="lblCardActiveAccountsTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Active Accounts</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valActiveAccounts">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #28A745;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardCooldownAccounts">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardCooldownAccounts {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCardCool">
+            <item>
+             <widget class="QLabel" name="lblCardCooldownAccountsTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>In Cooldown</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valCooldownAccounts">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #DC3545;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardProxyStatus">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardProxyStatus {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCardOnline">
+            <item>
+             <widget class="QLabel" name="lblCardProxyStatusTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Service Online</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valProxyOnline">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #17A2B8;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupServiceStatus">
+
          <property name="font">
           <font>
            <family>Segoe UI</family>

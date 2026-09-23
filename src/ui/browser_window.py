@@ -777,6 +777,9 @@ class MainWindow(QMainWindow):
         if path == "/security":
             self._show_ip_management()
             return
+        if path == "/api-proxy":
+            self._show_proxy_settings()
+            return
         if path == "/monitor":
             self._show_traffic_logs()
             return
@@ -811,6 +814,7 @@ class MainWindow(QMainWindow):
     def _show_proxy_settings(self):
         self.proxy_settings_page.load_from_config()
         self.stack.setCurrentIndex(2)
+        db.set_setting("last_active_route", "/api-proxy")
 
     def _show_advanced_settings(self):
         self.advanced_settings_page.load_from_config()

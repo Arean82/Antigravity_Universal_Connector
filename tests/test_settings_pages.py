@@ -59,6 +59,12 @@ class TestNativeSettingsPages(unittest.TestCase):
         self.assertIsNotNone(page.ui)
         self.assertEqual(page.ui.windowTitle(), "Proxy Settings")
 
+        # Verify QLCDNumber widgets exist
+        self.assertIsNotNone(page.ui.valProxyPort)
+        self.assertIsNotNone(page.ui.valActiveAccounts)
+        self.assertIsNotNone(page.ui.valCooldownAccounts)
+        self.assertIsNotNone(page.ui.valProxyOnline)
+
         page.ui.spinPort.setValue(9090)
         page.ui.chkAllowLan.setChecked(True)
         page.ui.editApiKey.setText("sk-test-key-1234")
@@ -68,6 +74,8 @@ class TestNativeSettingsPages(unittest.TestCase):
         self.assertEqual(page.ui.spinPort.value(), 9090)
         self.assertTrue(page.ui.chkAllowLan.isChecked())
         self.assertEqual(page.ui.editApiKey.text(), "sk-test-key-1234")
+        self.assertEqual(page.ui.valProxyPort.value(), 9090)
+
 
     def test_advanced_settings_page_direct_ui(self):
         page = AdvancedSettingsPage()
@@ -229,6 +237,10 @@ class TestNativeSettingsPages(unittest.TestCase):
         # Test switching to Debug Console
         win._navigate_to_settings_tab("debug")
         self.assertEqual(win.stack.currentIndex(), 1)
+
+        # Test switching to API Proxy route (/api-proxy)
+        win._navigate_to("/api-proxy")
+        self.assertEqual(win.stack.currentIndex(), 2)
 
         # Test switching to User Tokens route (/user-token)
         win._navigate_to("/user-token")

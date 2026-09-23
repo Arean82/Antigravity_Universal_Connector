@@ -3,9 +3,10 @@ import json
 import secrets
 from typing import Dict, Any, Optional
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QMessageBox
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QMessageBox, QLCDNumber
 from PySide6.QtCore import QFile, Signal, Slot, QTimer
 from PySide6.QtUiTools import QUiLoader
+
 
 from src.core.database import db
 
@@ -95,6 +96,24 @@ class ProxySettingsPage(QWidget):
         retention = proxy.get("log_retention", {})
         self.ui.spinLogMaxAge.setValue(int(retention.get("max_body_age_hours", 24)))
 
+        # Update QLCDNumber displays
+        accounts = db.list_accounts()
+        active_count = len([a for a in accounts if a.get("is_active")])
+
+        cooldown_count = 0
+        if self.bridge and hasattr(self.bridge, "proxy_server") and self.bridge.proxy_server:
+            tm = getattr(self.bridge.proxy_server, "token_manager", None)
+            if tm and hasattr(tm, "cooldowns"):
+                cooldown_count = len(tm.cooldowns)
+
+        if hasattr(self.ui, "valProxyPort") and self.ui.valProxyPort:
+            self.ui.valProxyPort.display(int(port))
+        if hasattr(self.ui, "valActiveAccounts") and self.ui.valActiveAccounts:
+            self.ui.valActiveAccounts.display(active_count)
+        if hasattr(self.ui, "valCooldownAccounts") and self.ui.valCooldownAccounts:
+            self.ui.valCooldownAccounts.display(cooldown_count)
+
+
     def save_settings(self):
         cfg = self.bridge.config if self.bridge else {}
         proxy = cfg.setdefault("proxy", {})
@@ -177,8 +196,16 @@ class ProxySettingsPage(QWidget):
             self.ui.lblStatusText.setText(f"Running on port {port}")
             self.ui.btnStartService.setEnabled(False)
             self.ui.btnStopService.setEnabled(True)
+            if hasattr(self.ui, "valProxyOnline") and self.ui.valProxyOnline:
+                self.ui.valProxyOnline.display(1)
         else:
             self.ui.lblStatusIcon.setStyleSheet("background-color: #DC3545; border-radius: 7px;")
             self.ui.lblStatusText.setText("Proxy Service Stopped")
             self.ui.btnStartService.setEnabled(True)
             self.ui.btnStopService.setEnabled(False)
+            if hasattr(self.ui, "valProxyOnline") and self.ui.valProxyOnline:
+                self.ui.valProxyOnline.display(0)
+
+        if hasattr(self.ui, "valProxyPort") and self.ui.valProxyPort:
+            self.ui.valProxyPort.display(int(port))
+
