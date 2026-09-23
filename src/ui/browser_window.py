@@ -15,6 +15,10 @@ from src.ui.pages.proxy_settings_page import ProxySettingsPage
 from src.ui.pages.advanced_settings_page import AdvancedSettingsPage
 from src.ui.pages.general_settings_page import GeneralSettingsPage
 from src.ui.pages.account_settings_page import AccountSettingsPage
+from src.ui.pages.user_tokens_page import UserTokensPage
+from src.ui.pages.ip_management_page import IpManagementPage
+from src.ui.pages.traffic_logs_page import TrafficLogsPage
+from src.ui.pages.token_stats_page import TokenStatsPage
 
 class CustomWebPage(QWebEnginePage):
     def __init__(self, parent=None, log_callback=None):
@@ -48,6 +52,12 @@ TAURI_POLYFILL_JS = """
         localStorage.setItem('i18nextLng', 'en');
     } catch(e) {}
 
+    window.addEventListener('error', function(e) {
+        console.error('[WebError]', e.message, 'at', e.filename, 'line', e.lineno, 'col', e.colno, e.error ? e.error.stack : '');
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+        console.error('[UnhandledPromiseRejection]', e.reason ? (e.reason.stack || e.reason) : e);
+    });
 
     // Tauri v2 internals metadata required by getCurrentWindow()
     window.__TAURI_INTERNALS__.metadata = {
@@ -295,7 +305,16 @@ TAURI_POLYFILL_JS = """
             }
 
             if (cmd === 'get_token_stats_summary' || cmd === 'get_proxy_stats') {
-                return { total_requests: 0, total_tokens: 0, successful_requests: 0, failed_requests: 0 };
+                return {
+                    total_requests: 0,
+                    total_tokens: 0,
+                    total_input_tokens: 0,
+                    total_output_tokens: 0,
+                    total_cached_tokens: 0,
+                    unique_accounts: 0,
+                    successful_requests: 0,
+                    failed_requests: 0
+                };
             }
 
             if (cmd === 'get_opencode_sync_status') {
@@ -490,6 +509,18 @@ class MainWindow(QMainWindow):
         # Index 5: Native PySide6 Account Settings (100% Native, built from account_settings.ui)
         self.account_settings_page = AccountSettingsPage(bridge=self.bridge, parent=self)
 
+        # Index 6: Native PySide6 User Tokens (100% Native, built from user_tokens.ui)
+        self.user_tokens_page = UserTokensPage(bridge=self.bridge, parent=self)
+
+        # Index 7: Native PySide6 IP Management (100% Native, built from ip_management.ui)
+        self.ip_management_page = IpManagementPage(bridge=self.bridge, parent=self)
+
+        # Index 8: Native PySide6 Traffic Logs (100% Native, built from traffic_logs.ui)
+        self.traffic_logs_page = TrafficLogsPage(bridge=self.bridge, parent=self)
+
+        # Index 9: Native PySide6 Token Stats (100% Native, built from token_stats.ui)
+        self.token_stats_page = TokenStatsPage(bridge=self.bridge, parent=self)
+
         # Index 0: WebEngine View (for views not yet migrated)
         self.web_view = QWebEngineView(self)
         self.web_page = CustomWebPage(self.web_view, log_callback=self.debug_console_page.add_log)
@@ -500,6 +531,10 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.advanced_settings_page)    # Index 3
         self.stack.addWidget(self.general_settings_page)     # Index 4
         self.stack.addWidget(self.account_settings_page)     # Index 5
+        self.stack.addWidget(self.user_tokens_page)          # Index 6
+        self.stack.addWidget(self.ip_management_page)        # Index 7
+        self.stack.addWidget(self.traffic_logs_page)         # Index 8
+        self.stack.addWidget(self.token_stats_page)          # Index 9
 
         # Inject Polyfill script at DocumentCreation so it executes before React
         self._inject_tauri_polyfill()
@@ -736,9 +771,33 @@ class MainWindow(QMainWindow):
         self.web_view.page().runJavaScript(js)
 
     def _navigate_to(self, path: str):
+        if path == "/user-token":
+            self._show_user_tokens()
+            return
+        if path == "/security":
+            self._show_ip_management()
+            return
+        if path == "/monitor":
+            self._show_traffic_logs()
+            return
+        if path == "/token-stats":
+            self._show_token_stats()
+            return
+
         self.stack.setCurrentIndex(0)
         db.set_setting("last_active_route", path)
-        js = f"window.location.pathname = '{path}'; if (window.__REACT_ROUTER__) {{ window.__REACT_ROUTER__.navigate('{path}'); }}"
+        js = f"""
+        (function() {{
+            const targetPath = '{path}';
+            if (window.location.pathname !== targetPath) {{
+                window.history.pushState(null, '', targetPath);
+                window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            if (window.__REACT_ROUTER__) {{
+                window.__REACT_ROUTER__.navigate(targetPath);
+            }}
+        }})();
+        """
         self.web_view.page().runJavaScript(js)
 
     def _show_debug_console(self):
@@ -764,6 +823,26 @@ class MainWindow(QMainWindow):
     def _show_account_settings(self):
         self.account_settings_page.load_from_config()
         self.stack.setCurrentIndex(5)
+
+    def _show_user_tokens(self):
+        self.user_tokens_page.load_from_config()
+        self.stack.setCurrentIndex(6)
+        db.set_setting("last_active_route", "/user-token")
+
+    def _show_ip_management(self):
+        self.ip_management_page.load_from_config()
+        self.stack.setCurrentIndex(7)
+        db.set_setting("last_active_route", "/security")
+
+    def _show_traffic_logs(self):
+        self.traffic_logs_page.load_from_config()
+        self.stack.setCurrentIndex(8)
+        db.set_setting("last_active_route", "/monitor")
+
+    def _show_token_stats(self):
+        self.token_stats_page.load_from_config()
+        self.stack.setCurrentIndex(9)
+        db.set_setting("last_active_route", "/token-stats")
 
     def _navigate_to_settings_tab(self, tab_name: str):
         if tab_name == "general":
@@ -912,9 +991,7 @@ class MainWindow(QMainWindow):
         self.web_view.page().scripts().insert(script)
 
     def _load_frontend(self):
-        last_route = db.get_setting("last_active_route", "/")
-        initial_url = f"http://127.0.0.1:8045{last_route}" if last_route and last_route.startswith("/") else "http://127.0.0.1:8045/"
-        self.web_view.setUrl(QUrl(initial_url))
+        self.web_view.setUrl(QUrl("http://127.0.0.1:8045/"))
 
     def closeEvent(self, event):
         def _save_url_callback(url_str):

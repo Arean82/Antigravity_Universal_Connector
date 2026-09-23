@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TrafficLogsForm</class>
+ <widget class="QWidget" name="TrafficLogsForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1050</width>
+    <height>750</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Traffic Logs</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QWidget#TrafficLogsForm {
+      background-color: #F8F9FA;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="mainVerticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>16</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="lblHeaderTitle">
+     <property name="font">
+      <font>
+       <family>DS-Digital</family>
+       <pointsize>18</pointsize>
+       <bold>true</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>TRAFFIC LOGS &amp; PROXY MONITOR</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutStatsCards">
+     <property name="spacing">
+      <number>14</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="cardTotalRequests">
+       <property name="styleSheet">
+        <string notr="true">
+         QFrame#cardTotalRequests {
+           background-color: #FFFFFF;
+           border: 1px solid #E2E8F0;
+           border-radius: 8px;
+           padding: 12px;
+         }
+        </string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCard1">
+        <item>
+         <widget class="QLabel" name="lblCardTotalRequestsTitle">
+          <property name="font">
+           <font>
+            <family>DS-Digital</family>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #718096;</string>
+          </property>
+          <property name="text">
+           <string>Total Requests</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valTotalRequests">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #0D6EFD;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="digitCount">
+           <number>8</number>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::SegmentStyle::Flat</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="cardSuccessRate">
+       <property name="styleSheet">
+        <string notr="true">
+         QFrame#cardSuccessRate {
+           background-color: #FFFFFF;
+           border: 1px solid #E2E8F0;
+           border-radius: 8px;
+           padding: 12px;
+         }
+        </string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCard2">
+        <item>
+         <widget class="QLabel" name="lblCardSuccessRateTitle">
+          <property name="font">
+           <font>
+            <family>DS-Digital</family>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #718096;</string>
+          </property>
+          <property name="text">
+           <string>Success Rate (%)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valSuccessRate">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #28A745;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="digitCount">
+           <number>6</number>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::SegmentStyle::Flat</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="cardActiveConnections">
+       <property name="styleSheet">
+        <string notr="true">
+         QFrame#cardActiveConnections {
+           background-color: #FFFFFF;
+           border: 1px solid #E2E8F0;
+           border-radius: 8px;
+           padding: 12px;
+         }
+        </string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCard3">
+        <item>
+         <widget class="QLabel" name="lblCardActiveConnectionsTitle">
+          <property name="font">
+           <font>
+            <family>DS-Digital</family>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #718096;</string>
+          </property>
+          <property name="text">
+           <string>Active Connections</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valActiveConnections">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #6F42C1;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="digitCount">
+           <number>6</number>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::SegmentStyle::Flat</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="cardBlockedRequests">
+       <property name="styleSheet">
+        <string notr="true">
+         QFrame#cardBlockedRequests {
+           background-color: #FFFFFF;
+           border: 1px solid #E2E8F0;
+           border-radius: 8px;
+           padding: 12px;
+         }
+        </string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCard4">
+        <item>
+         <widget class="QLabel" name="lblCardBlockedRequestsTitle">
+          <property name="font">
+           <font>
+            <family>DS-Digital</family>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #718096;</string>
+          </property>
+          <property name="text">
+           <string>Blocked / Errors</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valBlockedRequests">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #DC3545;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="digitCount">
+           <number>6</number>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::SegmentStyle::Flat</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutFilters">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="editSearch">
+       <property name="placeholderText">
+        <string>Search IP, endpoint, or model...</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboMethod">
+       <item>
+        <property name="text">
+         <string>All Methods</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>GET</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>POST</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboStatus">
+       <item>
+        <property name="text">
+         <string>All Status</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2xx Success</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4xx Errors</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5xx Server Errors</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkAutoRefresh">
+       <property name="text">
+        <string>Auto-refresh (3s)</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnRefresh">
+       <property name="text">
+        <string>Refresh</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClearLogs">
+       <property name="text">
+        <string>Clear Logs</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableLogs">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+     </property>
+     <property name="editTriggers">
+      <enum>QAbstractItemView::EditTrigger::NoEditTriggers</enum>
+     </property>
+     <property name="columnCount">
+      <number>7</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Method</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Endpoint / Path</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Model</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Client IP</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Duration (ms)</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutFooter">
+     <item>
+      <widget class="QLabel" name="lblLogCount">
+       <property name="text">
+        <string>0 requests recorded</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #718096; font-size: 11px;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

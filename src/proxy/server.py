@@ -20,9 +20,10 @@ class LocalProxyServer:
     and transparently rotates accounts on 429 errors.
     Also serves static assets for the React UI to support HTML5 History routing.
     """
-    def __init__(self, host: str = "127.0.0.1", port: int = 8045):
+    def __init__(self, host: str = "127.0.0.1", port: int = 8045, request_callback=None):
         self.host = host
         self.port = port
+        self.request_callback = request_callback
         self.token_manager = TokenManager()
         self.thinking_store = ThinkingStore()
         self.server: Optional[uvicorn.Server] = None

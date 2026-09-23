@@ -7,6 +7,10 @@ from src.ui.pages.advanced_settings_page import AdvancedSettingsPage
 from src.ui.pages.general_settings_page import GeneralSettingsPage
 from src.ui.pages.account_settings_page import AccountSettingsPage
 from src.ui.pages.debug_console_page import DebugConsolePage
+from src.ui.pages.user_tokens_page import UserTokensPage
+from src.ui.pages.ip_management_page import IpManagementPage
+from src.ui.pages.traffic_logs_page import TrafficLogsPage
+from src.ui.pages.token_stats_page import TokenStatsPage
 from src.ui.browser_window import MainWindow
 
 class TestNativeSettingsPages(unittest.TestCase):
@@ -80,15 +84,131 @@ class TestNativeSettingsPages(unittest.TestCase):
         self.assertTrue(page.ui.chkLockOnZeroQuota.isChecked())
         self.assertEqual(page.ui.editBackoffSteps.text(), "10, 20, 30")
 
+    def test_ip_management_page_direct_ui(self):
+        page = IpManagementPage()
+        self.assertIsNotNone(page.ui)
+        self.assertEqual(page.ui.windowTitle(), "IP Management")
+
+        page.rules.clear()
+        page.save_settings()
+
+        # Test policy controls
+        page.ui.chkEnableFiltering.setChecked(True)
+        page.ui.comboFilterMode.setCurrentIndex(1) # Whitelist
+        page.ui.chkAllowLoopback.setChecked(True)
+        page.ui.chkAllowLan.setChecked(False)
+
+        # Add valid IP rule
+        page.ui.editRuleIp.setText("192.168.1.50")
+        page.ui.comboRuleAction.setCurrentIndex(0) # ALLOW
+        page.ui.editRuleNote.setText("Test Allowed Machine")
+        page._on_add_rule()
+
+        self.assertEqual(len(page.rules), 1)
+        self.assertEqual(page.rules[0]["pattern"], "192.168.1.50")
+        self.assertEqual(page.rules[0]["action"], "ALLOW")
+        self.assertEqual(page.rules[0]["note"], "Test Allowed Machine")
+
+        # Save and reload
+        page.save_settings()
+        page.load_from_config()
+
+        self.assertTrue(page.ui.chkEnableFiltering.isChecked())
+        self.assertEqual(page.ui.comboFilterMode.currentIndex(), 1)
+        self.assertTrue(page.ui.chkAllowLoopback.isChecked())
+        self.assertFalse(page.ui.chkAllowLan.isChecked())
+        self.assertEqual(len(page.rules), 1)
+        self.assertEqual(page.rules[0]["pattern"], "192.168.1.50")
+
+    def test_user_tokens_page_direct_ui(self):
+        page = UserTokensPage()
+        self.assertIsNotNone(page.ui)
+        self.assertEqual(page.ui.windowTitle(), "User Tokens")
+
+        page.tokens.clear()
+        page.save_settings()
+
+        # Test token generation
+        page.ui.editTokenName.setText("VS Code Client")
+        page.ui.spinRpm.setValue(120)
+        page.ui.spinDailyQuota.setValue(5000)
+        page._on_generate_token()
+
+        self.assertEqual(len(page.tokens), 1)
+        token_entry = page.tokens[0]
+        self.assertEqual(token_entry["name"], "VS Code Client")
+        self.assertEqual(token_entry["rpm"], 120)
+        self.assertEqual(token_entry["daily_quota"], 5000)
+        self.assertTrue(token_entry["token"].startswith("sk-antigravity-"))
+        self.assertEqual(token_entry["status"], "Active")
+
+        # Test pause/resume
+        page._toggle_token_status(0)
+        self.assertEqual(page.tokens[0]["status"], "Suspended")
+        page._toggle_token_status(0)
+        self.assertEqual(page.tokens[0]["status"], "Active")
+
+        # Save and reload
+        page.save_settings()
+        page.load_from_config()
+        self.assertEqual(len(page.tokens), 1)
+        self.assertEqual(page.tokens[0]["name"], "VS Code Client")
+
+    def test_traffic_logs_page_direct_ui(self):
+        page = TrafficLogsPage()
+        self.assertIsNotNone(page.form_widget)
+        self.assertEqual(page.form_widget.windowTitle(), "Traffic Logs")
+
+        # Verify QLCDNumber widgets exist
+        self.assertIsNotNone(page.val_total_requests)
+        self.assertIsNotNone(page.val_success_rate)
+        self.assertIsNotNone(page.val_active_connections)
+        self.assertIsNotNone(page.val_blocked_requests)
+
+        # Add sample traffic record
+        page.add_traffic_record(
+            method="POST",
+            path="/v1/chat/completions",
+            model="gemini-2.5-pro",
+            client_ip="127.0.0.1",
+            status=200,
+            duration_ms=45.2,
+        )
+        page.load_from_config()
+        self.assertEqual(len(page.traffic_records), 1)
+        self.assertEqual(page.val_total_requests.value(), 1)
+        self.assertEqual(page.table_logs.rowCount(), 1)
+
+    def test_token_stats_page_direct_ui(self):
+        page = TokenStatsPage()
+        self.assertIsNotNone(page.form_widget)
+        self.assertEqual(page.form_widget.windowTitle(), "Token Stats")
+
+        # Verify QLCDNumber widgets exist
+        self.assertIsNotNone(page.val_total_tokens)
+        self.assertIsNotNone(page.val_input_tokens)
+        self.assertIsNotNone(page.val_output_tokens)
+        self.assertIsNotNone(page.val_cached_tokens)
+        self.assertIsNotNone(page.val_active_accounts)
+
+        # Test loading config and tables
+        page.load_from_config()
+        self.assertGreaterEqual(page.table_model_stats.rowCount(), 3)
+        self.assertIsNotNone(page.table_account_stats)
+
     def test_mainwindow_stack_navigation_and_shortcuts(self):
         win = MainWindow()
-        self.assertEqual(win.stack.count(), 6)
+        self.assertEqual(win.stack.count(), 10)
         self.assertEqual(win.stack.widget(0), win.web_view)
         self.assertEqual(win.stack.widget(1), win.debug_console_page)
         self.assertEqual(win.stack.widget(2), win.proxy_settings_page)
         self.assertEqual(win.stack.widget(3), win.advanced_settings_page)
         self.assertEqual(win.stack.widget(4), win.general_settings_page)
         self.assertEqual(win.stack.widget(5), win.account_settings_page)
+        self.assertEqual(win.stack.widget(6), win.user_tokens_page)
+        self.assertEqual(win.stack.widget(7), win.ip_management_page)
+        self.assertEqual(win.stack.widget(8), win.traffic_logs_page)
+        self.assertEqual(win.stack.widget(9), win.token_stats_page)
 
         # Test switching to General Settings
         win._navigate_to_settings_tab("general")
@@ -110,9 +230,26 @@ class TestNativeSettingsPages(unittest.TestCase):
         win._navigate_to_settings_tab("debug")
         self.assertEqual(win.stack.currentIndex(), 1)
 
+        # Test switching to User Tokens route (/user-token)
+        win._navigate_to("/user-token")
+        self.assertEqual(win.stack.currentIndex(), 6)
+
+        # Test switching to IP Management route (/security)
+        win._navigate_to("/security")
+        self.assertEqual(win.stack.currentIndex(), 7)
+
+        # Test switching to Traffic Logs route (/monitor)
+        win._navigate_to("/monitor")
+        self.assertEqual(win.stack.currentIndex(), 8)
+
+        # Test switching to Token Stats route (/token-stats)
+        win._navigate_to("/token-stats")
+        self.assertEqual(win.stack.currentIndex(), 9)
+
         # Test switching back to Web view
         win._navigate_to("/")
         self.assertEqual(win.stack.currentIndex(), 0)
 
 if __name__ == "__main__":
     unittest.main()
+

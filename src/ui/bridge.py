@@ -145,12 +145,27 @@ class BackendBridge(QObject):
     def list_accounts(self) -> str:
         accounts = db.list_accounts()
         current_id = None
+        normalized = []
         for a in accounts:
-            if a.get("status") == "active":
-                current_id = a.get("id")
-                break
+            acc_id = str(a.get("id") or "")
+            is_active = bool(a.get("is_active"))
+            status = "active" if is_active else "inactive"
+            if is_active and not current_id:
+                current_id = acc_id
+            normalized.append({
+                "id": acc_id,
+                "email": a.get("email") or "",
+                "name": a.get("name") or a.get("email") or "",
+                "picture": a.get("picture") or "",
+                "status": status,
+                "is_active": is_active,
+                "subscription_tier": a.get("subscription_tier") or "FREE",
+                "quota": a.get("quota") or {},
+                "created_at": a.get("created_at") or 0,
+                "last_refreshed": a.get("last_refreshed") or 0
+            })
         return json.dumps({
-            "accounts": accounts,
+            "accounts": normalized,
             "current_account_id": current_id
         })
 
@@ -158,8 +173,17 @@ class BackendBridge(QObject):
     def get_current_account(self) -> str:
         accounts = db.list_accounts()
         for a in accounts:
-            if a.get("status") == "active":
-                return json.dumps(a)
+            if a.get("is_active"):
+                return json.dumps({
+                    "id": str(a.get("id") or ""),
+                    "email": a.get("email") or "",
+                    "name": a.get("name") or a.get("email") or "",
+                    "picture": a.get("picture") or "",
+                    "status": "active",
+                    "is_active": True,
+                    "subscription_tier": a.get("subscription_tier") or "FREE",
+                    "quota": a.get("quota") or {}
+                })
         return json.dumps(None)
 
     @Slot(str, str, result=str)
@@ -255,7 +279,7 @@ class BackendBridge(QObject):
         is_running = self.proxy_server is not None
         port = self.proxy_server.port if self.proxy_server else 8045
         accounts = db.list_accounts()
-        active_count = len([a for a in accounts if a.get("status") == "active"])
+        active_count = len([a for a in accounts if a.get("is_active")])
         return json.dumps({
             "running": is_running,
             "port": port,

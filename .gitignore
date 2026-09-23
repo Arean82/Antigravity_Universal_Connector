@@ -1,12 +1,23 @@
-# Python
+# =============================================================================
+# Antigravity Universal Connector Enterprise Git Exclusion Architecture
+# =============================================================================
+
+# Byte-compiled / Optimized Python Artifacts & C Extensions
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.pyd
+
+# Virtual Environments & Python Runtime Isolations
 .Python
 env/
 venv/
 ENV/
+env.bak/
+venv.bak/
+
+# Packaging, Distribution & PyInstaller Standalone Builds
 build/
 develop-eggs/
 dist/
@@ -23,10 +34,15 @@ wheels/
 .installed.cfg
 *.egg
 
-# PySide6 compiled UI / resources cache
-*.pyc
+# Testing, Quality Assurance & Coverage Metrics
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
 
-# SQLite Databases & Local Configs
+# SQLite Persistence, Local Telemetry & Runtime Databases
 *.db
 *.sqlite
 *.sqlite3
@@ -34,19 +50,29 @@ settings.json
 state.json
 .antigravity-model-patch/
 
-# Node / Web artifacts (if any)
+# Node Package Manager & Web Frontend Dependency Artifacts
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS-specific
-Thumbs.db
-Desktop.ini
-.DS_Store
-
-# IDE / Editor files
+# Integrated Development Environments & Workspace State
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
+
+# Operating System Temporary & Metadata Files
+Thumbs.db
+Desktop.ini
+.DS_Store
+.Spotlight-V100
+.Trashes
+
+# Local Developer Notes & Private Overrides
+rules.md
+AGENTS.md
+scratch/
+
