@@ -13,6 +13,8 @@ from src.ui.browser_window import MainWindow
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName("Antigravity Universal Connector")
+    # Apply native Windows Vista/7/XP classic style to all native widgets
+    app.setStyle("windowsvista")
 
     window = MainWindow()
     window.show()

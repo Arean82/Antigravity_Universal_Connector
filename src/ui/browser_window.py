@@ -21,11 +21,10 @@ TAURI_POLYFILL_JS = """
     window.__TAURI_INTERNALS__ = window.__TAURI_INTERNALS__ || {};
 
     try {
+        localStorage.setItem('app_language', 'en');
         localStorage.setItem('i18nextLng', 'en');
-        if (!localStorage.getItem('app_language')) {
-            localStorage.setItem('app_language', 'en');
-        }
     } catch(e) {}
+
 
     // Tauri v2 internals metadata required by getCurrentWindow()
     window.__TAURI_INTERNALS__.metadata = {
@@ -470,6 +469,52 @@ class MainWindow(QMainWindow):
 
     def _create_menu_bar(self):
         menubar = self.menuBar()
+        # Authentic native Windows Vista / XP classic menu bar styling
+        menubar.setStyleSheet("""
+            QMenuBar {
+                background-color: #F0F0F0;
+                color: #000000;
+                font-family: 'Segoe UI', 'Tahoma', sans-serif;
+                font-size: 12px;
+                border-bottom: 1px solid #D0D0D0;
+                padding: 1px 2px;
+            }
+            QMenuBar::item {
+                background: transparent;
+                padding: 4px 8px;
+                border-radius: 2px;
+            }
+            QMenuBar::item:selected {
+                background-color: #CCE8FF;
+                border: 1px solid #99D1FF;
+                color: #000000;
+            }
+            QMenuBar::item:pressed {
+                background-color: #99D1FF;
+                border: 1px solid #66BAFF;
+            }
+            QMenu {
+                background-color: #F8F8F8;
+                color: #000000;
+                font-family: 'Segoe UI', 'Tahoma', sans-serif;
+                font-size: 12px;
+                border: 1px solid #999999;
+                padding: 3px;
+            }
+            QMenu::item {
+                padding: 4px 24px 4px 20px;
+                border-radius: 2px;
+            }
+            QMenu::item:selected {
+                background-color: #90C8F6;
+                color: #000000;
+            }
+            QMenu::separator {
+                height: 1px;
+                background-color: #D4D4D4;
+                margin: 3px 6px;
+            }
+        """)
 
         # --- File Menu ---
         file_menu = menubar.addMenu("&File")
