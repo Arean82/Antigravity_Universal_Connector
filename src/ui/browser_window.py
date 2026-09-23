@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMenuBar, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMenuBar, QMessageBox, QStackedWidget
 from PySide6.QtGui import QAction, QKeySequence, QActionGroup
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWebEngineCore import QWebEngineScript, QWebEnginePage
@@ -10,10 +10,33 @@ from PySide6.QtCore import QUrl
 from src.core.database import db
 from src.ui.bridge import BackendBridge
 from src.proxy.server import LocalProxyServer
+from src.ui.pages.debug_console_page import DebugConsolePage
+from src.ui.pages.proxy_settings_page import ProxySettingsPage
+from src.ui.pages.advanced_settings_page import AdvancedSettingsPage
+from src.ui.pages.general_settings_page import GeneralSettingsPage
+from src.ui.pages.account_settings_page import AccountSettingsPage
 
 class CustomWebPage(QWebEnginePage):
+    def __init__(self, parent=None, log_callback=None):
+        super().__init__(parent)
+        self.log_callback = log_callback
+
     def javaScriptConsoleMessage(self, level, message, lineNumber, sourceId):
         print(f"js: {message}")
+        if self.log_callback:
+            lvl_name = "INFO"
+            if level == QWebEnginePage.JavaScriptConsoleMessageLevel.ErrorMessageLevel:
+                lvl_name = "ERROR"
+            elif level == QWebEnginePage.JavaScriptConsoleMessageLevel.WarningMessageLevel:
+                lvl_name = "WARN"
+
+            src = sourceId.split("/")[-1] if sourceId else "browser"
+            self.log_callback(
+                level=lvl_name,
+                target=f"web::{src}",
+                message=message,
+                fields={"line": lineNumber, "source": sourceId}
+            )
 
 TAURI_POLYFILL_JS = """
 (function() {
@@ -439,23 +462,49 @@ class MainWindow(QMainWindow):
         self.proxy_server = LocalProxyServer(host="127.0.0.1", port=8045)
         self.proxy_server.start()
 
-        # Central WebEngine container
+        # Central multi-page container supporting progressive native PySide6 migration
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
+        self.stack = QStackedWidget(self)
+        self.layout.addWidget(self.stack)
+
+        # Configure QWebChannel & BackendBridge
+        self.bridge = BackendBridge(self)
+        self.bridge.proxy_server = self.proxy_server
+
+        # Index 1: Native PySide6 Debug Console (100% Native, built from debug_console.ui)
+        self.debug_console_page = DebugConsolePage(self)
+
+        # Index 2: Native PySide6 Proxy Settings (100% Native, built from proxy_settings.ui)
+        self.proxy_settings_page = ProxySettingsPage(bridge=self.bridge, parent=self)
+
+        # Index 3: Native PySide6 Advanced Settings (100% Native, built from advanced_settings.ui)
+        self.advanced_settings_page = AdvancedSettingsPage(bridge=self.bridge, parent=self)
+
+        # Index 4: Native PySide6 General Settings (100% Native, built from general_settings.ui)
+        self.general_settings_page = GeneralSettingsPage(bridge=self.bridge, parent=self)
+
+        # Index 5: Native PySide6 Account Settings (100% Native, built from account_settings.ui)
+        self.account_settings_page = AccountSettingsPage(bridge=self.bridge, parent=self)
+
+        # Index 0: WebEngine View (for views not yet migrated)
         self.web_view = QWebEngineView(self)
-        self.web_page = CustomWebPage(self.web_view)
+        self.web_page = CustomWebPage(self.web_view, log_callback=self.debug_console_page.add_log)
         self.web_view.setPage(self.web_page)
-        self.layout.addWidget(self.web_view)
+        self.stack.addWidget(self.web_view)                 # Index 0
+        self.stack.addWidget(self.debug_console_page)        # Index 1
+        self.stack.addWidget(self.proxy_settings_page)       # Index 2
+        self.stack.addWidget(self.advanced_settings_page)    # Index 3
+        self.stack.addWidget(self.general_settings_page)     # Index 4
+        self.stack.addWidget(self.account_settings_page)     # Index 5
 
         # Inject Polyfill script at DocumentCreation so it executes before React
         self._inject_tauri_polyfill()
 
-        # Configure QWebChannel
         self.channel = QWebChannel(self.web_view.page())
-        self.bridge = BackendBridge(self)
         self.channel.registerObject("backendBridge", self.bridge)
         self.web_view.page().setWebChannel(self.channel)
 
@@ -535,41 +584,36 @@ class MainWindow(QMainWindow):
         nav_menu = menubar.addMenu("&Navigate")
 
         nav_items = [
-            ("Dashboard", "/"),
-            ("Accounts", "/accounts"),
-            ("API Proxy", "/api-proxy"),
-            ("Transit Station", "/apikey-fun"),
-            ("Traffic Logs", "/monitor"),
-            ("Token Stats", "/token-stats"),
-            ("User Tokens", "/user-token"),
-            ("IP Management", "/security"),
+            ("Dashboard", "/", "Ctrl+1"),
+            ("Accounts", "/accounts", "Ctrl+2"),
+            ("API Proxy", "/api-proxy", "Ctrl+3"),
+            ("Transit Station", "/apikey-fun", "Ctrl+4"),
+            ("Traffic Logs", "/monitor", "Ctrl+5"),
+            ("Token Stats", "/token-stats", "Ctrl+6"),
+            ("User Tokens", "/user-token", "Ctrl+7"),
+            ("IP Management", "/security", "Ctrl+8"),
         ]
 
-        for label, path in nav_items:
+        for label, path, shortcut in nav_items:
             action = QAction(label, self)
+            action.setShortcut(QKeySequence(shortcut))
             action.triggered.connect(lambda checked=False, p=path: self._navigate_to(p))
             nav_menu.addAction(action)
 
         # --- Settings Menu (Dedicated Top-Level) ---
         settings_menu = menubar.addMenu("&Settings")
 
-        settings_main_action = QAction("All Settings", self)
-        settings_main_action.setShortcut(QKeySequence("Ctrl+,"))
-        settings_main_action.triggered.connect(lambda: self._navigate_to("/settings"))
-        settings_menu.addAction(settings_main_action)
-
-        settings_menu.addSeparator()
-
         settings_sections = [
-            ("General Settings", "general"),
-            ("Account Settings", "account"),
-            ("Proxy Settings", "proxy"),
-            ("Advanced Settings", "advanced"),
-            ("Debug Console", "debug"),
+            ("General Settings", "general", "Ctrl+G"),
+            ("Account Settings", "account", "Ctrl+A"),
+            ("Proxy Settings", "proxy", "Ctrl+P"),
+            ("Advanced Settings", "advanced", "Ctrl+Alt+A"),
+            ("Debug Console", "debug", "Ctrl+Shift+D"),
         ]
 
-        for label, tab in settings_sections:
+        for label, tab, shortcut in settings_sections:
             action = QAction(label, self)
+            action.setShortcut(QKeySequence(shortcut))
             action.triggered.connect(lambda checked=False, t=tab: self._navigate_to_settings_tab(t))
             settings_menu.addAction(action)
 
@@ -623,6 +667,13 @@ class MainWindow(QMainWindow):
 
         # --- Tools Menu ---
         tools_menu = menubar.addMenu("&Tools")
+
+        debug_console_action = QAction("Debug Console", self)
+        debug_console_action.setShortcut(QKeySequence("Ctrl+Shift+D"))
+        debug_console_action.triggered.connect(self._show_debug_console)
+        tools_menu.addAction(debug_console_action)
+
+        tools_menu.addSeparator()
 
         start_proxy_action = QAction("Start Proxy Service", self)
         start_proxy_action.triggered.connect(lambda: self.bridge.start_proxy(8045, lambda res: None))
@@ -685,11 +736,53 @@ class MainWindow(QMainWindow):
         self.web_view.page().runJavaScript(js)
 
     def _navigate_to(self, path: str):
+        self.stack.setCurrentIndex(0)
         db.set_setting("last_active_route", path)
         js = f"window.location.pathname = '{path}'; if (window.__REACT_ROUTER__) {{ window.__REACT_ROUTER__.navigate('{path}'); }}"
         self.web_view.page().runJavaScript(js)
 
+    def _show_debug_console(self):
+        self.stack.setCurrentIndex(1)
+        self.debug_console_page.add_log(
+            level="INFO",
+            target="ui::navigator",
+            message="Switched to native PySide6 Debug Console view."
+        )
+
+    def _show_proxy_settings(self):
+        self.proxy_settings_page.load_from_config()
+        self.stack.setCurrentIndex(2)
+
+    def _show_advanced_settings(self):
+        self.advanced_settings_page.load_from_config()
+        self.stack.setCurrentIndex(3)
+
+    def _show_general_settings(self):
+        self.general_settings_page.load_from_config()
+        self.stack.setCurrentIndex(4)
+
+    def _show_account_settings(self):
+        self.account_settings_page.load_from_config()
+        self.stack.setCurrentIndex(5)
+
     def _navigate_to_settings_tab(self, tab_name: str):
+        if tab_name == "general":
+            self._show_general_settings()
+            return
+        if tab_name == "account":
+            self._show_account_settings()
+            return
+        if tab_name == "proxy":
+            self._show_proxy_settings()
+            return
+        if tab_name == "advanced":
+            self._show_advanced_settings()
+            return
+        if tab_name == "debug":
+            self._show_debug_console()
+            return
+
+        self._show_general_settings()
         db.set_setting("last_active_route", "/settings")
         js = f"""
         (function() {{

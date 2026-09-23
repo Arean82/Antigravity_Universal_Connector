@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdvancedSettingsForm</class>
+ <widget class="QWidget" name="AdvancedSettingsForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>950</width>
+    <height>850</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Advanced Settings</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QWidget#AdvancedSettingsForm {
+      background-color: #F8F9FA;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="mainVerticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>16</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <family>DS-Digital</family>
+       <pointsize>17</pointsize>
+       <bold>true</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>ADVANCED SETTINGS</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="styleSheet">
+      <string notr="true">
+       QScrollArea {
+         background: transparent;
+         border: none;
+       }
+       QWidget#scrollContent {
+         background-color: transparent;
+       }
+      </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollContent">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>918</width>
+        <height>715</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="layoutContent">
+       <property name="spacing">
+        <number>14</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupExecutables">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>10</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+           QGroupBox {
+             background-color: #FFFFFF;
+             border: 1px solid #DCE1E7;
+             border-radius: 8px;
+             margin-top: 8px;
+             padding: 14px 12px 12px 12px;
+             font-weight: bold;
+           }
+           QGroupBox::title {
+             subcontrol-origin: margin;
+             subcontrol-position: top left;
+             padding: 0 6px;
+             color: #2D3748;
+           }
+          </string>
+         </property>
+         <property name="title">
+          <string>Executable Paths &amp; Tool Detection</string>
+         </property>
+         <layout class="QFormLayout" name="layoutFormExecutables">
+          <property name="horizontalSpacing">
+           <number>16</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>12</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblAntigravity">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Antigravity App:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="layoutAntigravity">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="editAntigravityPath">
+              <property name="minimumSize">
+               <size>
+                <width>380</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Path to Antigravity executable (e.g. C:\Program Files\Antigravity\Antigravity.exe)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnBrowseAntigravity">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 10px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Browse...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnDetectAntigravity">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 10px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Auto-Detect</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblIde">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Antigravity IDE:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="layoutIde">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="editIdePath">
+              <property name="minimumSize">
+               <size>
+                <width>380</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Path to Antigravity IDE executable</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnBrowseIde">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 10px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Browse...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnDetectIde">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 10px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Auto-Detect</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblCli">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Antigravity CLI:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="layoutCli">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="editCliPath">
+              <property name="minimumSize">
+               <size>
+                <width>380</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Path to antigravity CLI binary (or agy command)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnBrowseCli">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 10px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Browse...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnDetectCli">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 10px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Auto-Detect</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lblArgs">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Extra Arguments:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="editExtraArgs">
+            <property name="minimumSize">
+             <size>
+              <width>380</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>--no-sandbox --disable-gpu (optional flags passed to binary)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupCircuitBreaker">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>10</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+           QGroupBox {
+             background-color: #FFFFFF;
+             border: 1px solid #DCE1E7;
+             border-radius: 8px;
+             margin-top: 8px;
+             padding: 14px 12px 12px 12px;
+             font-weight: bold;
+           }
+           QGroupBox::title {
+             subcontrol-origin: margin;
+             subcontrol-position: top left;
+             padding: 0 6px;
+             color: #2D3748;
+           }
+          </string>
+         </property>
+         <property name="title">
+          <string>Quota Circuit Breaker Policy</string>
+         </property>
+         <layout class="QFormLayout" name="layoutFormBreaker">
+          <property name="horizontalSpacing">
+           <number>16</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>12</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblBreakerEnable">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Circuit Breaker:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="chkCircuitBreaker">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Enable automated circuit breaker backoff upon upstream rate limits</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblLockZero">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Zero Quota Lock:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="chkLockOnZeroQuota">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Lock account from routing traffic when 100% quota exhausted (0% remaining)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblBackoff">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Backoff Steps:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="editBackoffSteps">
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>60, 300, 1800, 7200</string>
+            </property>
+            <property name="placeholderText">
+             <string>Backoff intervals in seconds (e.g. 60, 300, 1800, 7200)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupStorage">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>10</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+           QGroupBox {
+             background-color: #FFFFFF;
+             border: 1px solid #DCE1E7;
+             border-radius: 8px;
+             margin-top: 8px;
+             padding: 14px 12px 12px 12px;
+             font-weight: bold;
+           }
+           QGroupBox::title {
+             subcontrol-origin: margin;
+             subcontrol-position: top left;
+             padding: 0 6px;
+             color: #2D3748;
+           }
+          </string>
+         </property>
+         <property name="title">
+          <string>Storage &amp; Maintenance Operations</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutStorage">
+          <property name="spacing">
+           <number>12</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="layoutDataDir">
+            <property name="spacing">
+             <number>8</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblDataDirTitle">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>9</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Data Directory:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblDataDirPath">
+              <property name="font">
+               <font>
+                <family>Consolas</family>
+                <pointsize>9</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #4A5568;</string>
+              </property>
+              <property name="text">
+               <string>~/.antigravity_tools/</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="spacerDataDir">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnOpenDataDir">
+              <property name="styleSheet">
+               <string notr="true">padding: 4px 12px; font-size: 11px;</string>
+              </property>
+              <property name="text">
+               <string>Open Folder</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="layoutMaintenanceActions">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="btnClearCache">
+              <property name="styleSheet">
+               <string notr="true">
+                QPushButton {
+                  background-color: #FFF3CD;
+                  color: #856404;
+                  border: 1px solid #FFEEBA;
+                  border-radius: 5px;
+                  padding: 6px 14px;
+                  font-size: 11px;
+                  font-weight: bold;
+                }
+                QPushButton:hover {
+                  background-color: #FFE8A1;
+                }
+               </string>
+              </property>
+              <property name="text">
+               <string>Clear Antigravity Cache</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnImportVscdb">
+              <property name="styleSheet">
+               <string notr="true">
+                QPushButton {
+                  background-color: #E7F1FF;
+                  color: #0D6EFD;
+                  border: 1px solid #B6D4FE;
+                  border-radius: 5px;
+                  padding: 6px 14px;
+                  font-size: 11px;
+                  font-weight: bold;
+                }
+                QPushButton:hover {
+                  background-color: #CFE2FF;
+                }
+               </string>
+              </property>
+              <property name="text">
+               <string>Import VSCode DB Accounts</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="spacerMaintenance">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="spacerContentBottom">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frameBottomBar">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>56</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+       QFrame#frameBottomBar {
+         background-color: #FFFFFF;
+         border-top: 1px solid #DCE1E7;
+         padding: 8px 12px;
+         border-radius: 6px;
+       }
+      </string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutBottomBar">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblSaveStatus">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>9</pointsize>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #6C757D;</string>
+        </property>
+        <property name="text">
+         <string>All advanced configurations are stored in local SQLite.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="spacerBottom">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnSaveSettings">
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: #0D6EFD;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 16px;
+          }
+          QPushButton:hover {
+            background-color: #0B5ED7;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Save Settings</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

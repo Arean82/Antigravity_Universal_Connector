@@ -265,12 +265,14 @@ class BackendBridge(QObject):
 
     @Slot(int, result=str)
     def start_proxy(self, port: int = 8045) -> str:
-        if self.proxy_server:
+        if self.proxy_server and self.proxy_server.server and not getattr(self.proxy_server.server, "should_exit", False):
             return json.dumps({"success": True, "message": "Proxy already running", "port": self.proxy_server.port})
 
+        if self.proxy_server:
+            self.proxy_server.stop()
+
         self.proxy_server = LocalProxyServer(port=port)
-        loop = asyncio.get_event_loop()
-        self.proxy_task = loop.create_task(self.proxy_server.start())
+        self.proxy_server.start()
         self.proxyStatusChanged.emit(True, port)
         return json.dumps({"success": True, "port": port})
 
@@ -279,8 +281,7 @@ class BackendBridge(QObject):
         if not self.proxy_server:
             return json.dumps({"success": True, "message": "Proxy not running"})
 
-        loop = asyncio.get_event_loop()
-        loop.create_task(self.proxy_server.stop())
+        self.proxy_server.stop()
         self.proxy_server = None
         self.proxyStatusChanged.emit(False, 0)
         return json.dumps({"success": True})
