@@ -521,7 +521,6 @@ class MainWindow(QMainWindow):
             ("Proxy Settings", "proxy"),
             ("Advanced Settings", "advanced"),
             ("Debug Console", "debug"),
-            ("About & Updates", "about"),
         ]
 
         for label, tab in settings_sections:
@@ -691,6 +690,46 @@ class MainWindow(QMainWindow):
                 removeNav();
                 setTimeout(removeNav, 100);
                 setTimeout(removeNav, 500);
+
+                // Ensure each settings tab has a dedicated Save Settings button at the bottom
+                const ensureBottomSave = () => {
+                    const settingsContainer = document.querySelector('.bg-white.dark\\\\:bg-base-100.rounded-2xl.p-6, [class*="rounded-2xl p-6"]');
+                    if (settingsContainer && !document.getElementById('bottom-save-settings-bar')) {
+                        const bar = document.createElement('div');
+                        bar.id = 'bottom-save-settings-bar';
+                        bar.className = 'mt-8 pt-4 border-t border-gray-100 dark:border-base-200 flex justify-end items-center gap-3';
+                        bar.innerHTML = `
+                            <button id="bottom-save-btn" class="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm rounded-xl transition-all shadow-sm flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>
+                                Save Settings
+                            </button>
+                        `;
+                        settingsContainer.appendChild(bar);
+
+                        const btn = bar.querySelector('#bottom-save-btn');
+                        btn.onclick = () => {
+                            // Trigger original save button or dispatch save
+                            const originalSave = document.querySelector('.p-5.space-y-4 button[class*="bg-blue-500"]');
+                            if (originalSave) {
+                                originalSave.click();
+                            } else if (window.__TAURI__ && window.__TAURI__.invoke) {
+                            }
+                        };
+                    }
+                };
+                setInterval(ensureBottomSave, 500);
+
+                // Remove any legacy About or Update views and external upstream repo links
+                const purgeAboutAndUpdates = () => {
+                    document.querySelectorAll('a, button, div').forEach(el => {
+                        const href = el.getAttribute('href') || '';
+                        if (href.includes('Antigravity-Manager') || href.includes('lbjlaq')) {
+                            el.remove();
+                        }
+                    });
+                };
+                purgeAboutAndUpdates();
+                setInterval(purgeAboutAndUpdates, 1000);
             })();
             """
             self.web_view.page().runJavaScript(cleanup_nav_js)
