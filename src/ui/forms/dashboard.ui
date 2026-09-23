@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DashboardForm</class>
+ <widget class="QWidget" name="DashboardForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>820</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dashboard</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QWidget#DashboardForm {
+      background-color: #F8F9FA;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="mainVerticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>16</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="layoutTopHeader">
+     <item>
+      <widget class="QLabel" name="lblHeaderTitle">
+       <property name="font">
+        <font>
+         <family>DS-Digital</family>
+         <pointsize>18</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>DASHBOARD &amp; PROXY GATEWAY TELEMETRY</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacerHeader">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblProxyBadge">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+         background-color: #28A745;
+         color: #FFFFFF;
+         border-radius: 4px;
+         padding: 4px 10px;
+         font-size: 11px;
+        </string>
+       </property>
+       <property name="text">
+        <string>ONLINE : PORT 8045</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnToggleProxy">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton {
+           background-color: #0D6EFD;
+           color: #FFFFFF;
+           font-weight: bold;
+           border: none;
+           border-radius: 5px;
+           padding: 6px 14px;
+           font-size: 11px;
+         }
+         QPushButton:hover {
+           background-color: #0B5ED7;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Stop Proxy</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="styleSheet">
+      <string notr="true">
+       QScrollArea#scrollArea {
+         border: none;
+         background-color: transparent;
+       }
+       QScrollArea#scrollArea &gt; QWidget &gt; QWidget {
+         background-color: transparent;
+       }
+      </string>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1068</width>
+        <height>750</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="layoutContent">
+       <property name="spacing">
+        <number>14</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="layoutStatsCards">
+         <property name="spacing">
+          <number>14</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="cardActiveAccounts">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardActiveAccounts {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCard1">
+            <item>
+             <widget class="QLabel" name="lblCardActiveAccountsTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Active Pooled Accounts</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valActiveAccounts">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #28A745;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardProxyPort">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardProxyPort {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCard2">
+            <item>
+             <widget class="QLabel" name="lblCardProxyPortTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Proxy Port</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valProxyPort">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #0D6EFD;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardTotalTokens">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardTotalTokens {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCard3">
+            <item>
+             <widget class="QLabel" name="lblCardTotalTokensTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Tokens Consumed</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valTotalTokens">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #6F42C1;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>8</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardTotalRequests">
+           <property name="styleSheet">
+            <string notr="true">
+             QFrame#cardTotalRequests {
+               background-color: #FFFFFF;
+               border: 1px solid #E2E8F0;
+               border-radius: 8px;
+               padding: 12px;
+             }
+            </string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCard4">
+            <item>
+             <widget class="QLabel" name="lblCardTotalRequestsTitle">
+              <property name="font">
+               <font>
+                <family>DS-Digital</family>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #718096;</string>
+              </property>
+              <property name="text">
+               <string>Routed Requests</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="valTotalRequests">
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: #17A2B8;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::NoFrame</enum>
+              </property>
+              <property name="digitCount">
+               <number>6</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupQuickConnect">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>10</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Universal Gateway Quick-Connect</string>
+         </property>
+         <layout class="QFormLayout" name="layoutFormConnect">
+          <property name="horizontalSpacing">
+           <number>16</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>10</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblOpenAiUrlTitle">
+            <property name="text">
+             <string>OpenAI Base URL:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="layoutOpenAi">
+            <item>
+             <widget class="QLineEdit" name="editOpenAiUrl">
+              <property name="text">
+               <string>http://127.0.0.1:8045/v1</string>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnCopyOpenAi">
+              <property name="text">
+               <string>Copy</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblClaudeUrlTitle">
+            <property name="text">
+             <string>Claude Messages URL:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="layoutClaude">
+            <item>
+             <widget class="QLineEdit" name="editClaudeUrl">
+              <property name="text">
+               <string>http://127.0.0.1:8045/v1/messages</string>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnCopyClaude">
+              <property name="text">
+               <string>Copy</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupAccountPool">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>10</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Google Account Pool &amp; Load Balancing</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutAccountPool">
+          <item>
+           <layout class="QHBoxLayout" name="layoutPoolActions">
+            <item>
+             <widget class="QPushButton" name="btnImportVscdb">
+              <property name="styleSheet">
+               <string notr="true">
+                background-color: #28A745;
+                color: #FFFFFF;
+                font-weight: bold;
+                padding: 6px 14px;
+                border-radius: 5px;
+               </string>
+              </property>
+              <property name="text">
+               <string>1-Click Import from Antigravity</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAddAccount">
+              <property name="styleSheet">
+               <string notr="true">
+                background-color: #0D6EFD;
+                color: #FFFFFF;
+                font-weight: bold;
+                padding: 6px 14px;
+                border-radius: 5px;
+               </string>
+              </property>
+              <property name="text">
+               <string>Add Google Account</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnRefreshAccounts">
+              <property name="text">
+               <string>Refresh Accounts</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="spacerPool">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableAccounts">
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+            </property>
+            <property name="editTriggers">
+             <enum>QAbstractItemView::EditTrigger::NoEditTriggers</enum>
+            </property>
+            <property name="columnCount">
+             <number>6</number>
+            </property>
+            <column>
+             <property name="text">
+              <string>Active</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Email</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Tier</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Status</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Actions</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

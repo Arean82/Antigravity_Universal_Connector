@@ -11,6 +11,7 @@ from src.ui.pages.user_tokens_page import UserTokensPage
 from src.ui.pages.ip_management_page import IpManagementPage
 from src.ui.pages.traffic_logs_page import TrafficLogsPage
 from src.ui.pages.token_stats_page import TokenStatsPage
+from src.ui.pages.dashboard_page import DashboardPage
 from src.ui.browser_window import MainWindow
 
 class TestNativeSettingsPages(unittest.TestCase):
@@ -204,9 +205,30 @@ class TestNativeSettingsPages(unittest.TestCase):
         self.assertGreaterEqual(page.table_model_stats.rowCount(), 3)
         self.assertIsNotNone(page.table_account_stats)
 
+    def test_dashboard_page_direct_ui(self):
+        page = DashboardPage()
+        self.assertIsNotNone(page.form_widget)
+        self.assertEqual(page.form_widget.windowTitle(), "Dashboard")
+
+        # Verify QLCDNumber widgets exist
+        self.assertIsNotNone(page.val_active_accounts)
+        self.assertIsNotNone(page.val_proxy_port)
+        self.assertIsNotNone(page.val_total_tokens)
+        self.assertIsNotNone(page.val_total_requests)
+
+        # Verify account pool table exists
+        self.assertIsNotNone(page.table_accounts)
+
+        # Verify Quick Connect URL fields exist
+        self.assertIsNotNone(page.edit_openai_url)
+        self.assertIsNotNone(page.edit_claude_url)
+
+        # Test loading config (no bridge)
+        page.load_from_config()
+
     def test_mainwindow_stack_navigation_and_shortcuts(self):
         win = MainWindow()
-        self.assertEqual(win.stack.count(), 10)
+        self.assertEqual(win.stack.count(), 11)
         self.assertEqual(win.stack.widget(0), win.web_view)
         self.assertEqual(win.stack.widget(1), win.debug_console_page)
         self.assertEqual(win.stack.widget(2), win.proxy_settings_page)
@@ -217,6 +239,7 @@ class TestNativeSettingsPages(unittest.TestCase):
         self.assertEqual(win.stack.widget(7), win.ip_management_page)
         self.assertEqual(win.stack.widget(8), win.traffic_logs_page)
         self.assertEqual(win.stack.widget(9), win.token_stats_page)
+        self.assertEqual(win.stack.widget(10), win.dashboard_page)
 
         # Test switching to General Settings
         win._navigate_to_settings_tab("general")
@@ -258,10 +281,9 @@ class TestNativeSettingsPages(unittest.TestCase):
         win._navigate_to("/token-stats")
         self.assertEqual(win.stack.currentIndex(), 9)
 
-        # Test switching back to Web view
+        # Test switching to Dashboard route (/)
         win._navigate_to("/")
-        self.assertEqual(win.stack.currentIndex(), 0)
+        self.assertEqual(win.stack.currentIndex(), 10)
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -19,6 +19,7 @@ from src.ui.pages.user_tokens_page import UserTokensPage
 from src.ui.pages.ip_management_page import IpManagementPage
 from src.ui.pages.traffic_logs_page import TrafficLogsPage
 from src.ui.pages.token_stats_page import TokenStatsPage
+from src.ui.pages.dashboard_page import DashboardPage
 
 class CustomWebPage(QWebEnginePage):
     def __init__(self, parent=None, log_callback=None):
@@ -521,6 +522,9 @@ class MainWindow(QMainWindow):
         # Index 9: Native PySide6 Token Stats (100% Native, built from token_stats.ui)
         self.token_stats_page = TokenStatsPage(bridge=self.bridge, parent=self)
 
+        # Index 10: Native PySide6 Dashboard (100% Native, built from dashboard.ui)
+        self.dashboard_page = DashboardPage(bridge=self.bridge, parent=self)
+
         # Index 0: WebEngine View (for views not yet migrated)
         self.web_view = QWebEngineView(self)
         self.web_page = CustomWebPage(self.web_view, log_callback=self.debug_console_page.add_log)
@@ -535,6 +539,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.ip_management_page)        # Index 7
         self.stack.addWidget(self.traffic_logs_page)         # Index 8
         self.stack.addWidget(self.token_stats_page)          # Index 9
+        self.stack.addWidget(self.dashboard_page)            # Index 10
 
         # Inject Polyfill script at DocumentCreation so it executes before React
         self._inject_tauri_polyfill()
@@ -771,6 +776,9 @@ class MainWindow(QMainWindow):
         self.web_view.page().runJavaScript(js)
 
     def _navigate_to(self, path: str):
+        if path == "/":
+            self._show_dashboard()
+            return
         if path == "/user-token":
             self._show_user_tokens()
             return
@@ -847,6 +855,11 @@ class MainWindow(QMainWindow):
         self.token_stats_page.load_from_config()
         self.stack.setCurrentIndex(9)
         db.set_setting("last_active_route", "/token-stats")
+
+    def _show_dashboard(self):
+        self.dashboard_page.load_from_config()
+        self.stack.setCurrentIndex(10)
+        db.set_setting("last_active_route", "/")
 
     def _navigate_to_settings_tab(self, tab_name: str):
         if tab_name == "general":
