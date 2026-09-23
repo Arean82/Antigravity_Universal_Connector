@@ -3,574 +3,368 @@
  <class>TokenStatsForm</class>
  <widget class="QWidget" name="TokenStatsForm">
   <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1050</width>
-    <height>750</height>
-   </rect>
+   <rect><x>0</x><y>0</y><width>1050</width><height>900</height></rect>
   </property>
-  <property name="windowTitle">
-   <string>Token Stats</string>
-  </property>
+  <property name="windowTitle"><string>Token Stats</string></property>
   <property name="styleSheet">
-   <string notr="true">
-    QWidget#TokenStatsForm {
-      background-color: #F8F9FA;
-    }
-   </string>
+   <string notr="true">QWidget#TokenStatsForm { background-color: #F8F9FA; }</string>
   </property>
   <layout class="QVBoxLayout" name="mainVerticalLayout">
-   <property name="spacing">
-    <number>12</number>
-   </property>
-   <property name="leftMargin">
-    <number>16</number>
-   </property>
-   <property name="topMargin">
-    <number>16</number>
-   </property>
-   <property name="rightMargin">
-    <number>16</number>
-   </property>
-   <property name="bottomMargin">
-    <number>16</number>
-   </property>
+   <property name="spacing"><number>12</number></property>
+   <property name="leftMargin"><number>16</number></property>
+   <property name="topMargin"><number>16</number></property>
+   <property name="rightMargin"><number>16</number></property>
+   <property name="bottomMargin"><number>16</number></property>
+
+   <!-- Header row: title + viewMode toggle + refresh -->
    <item>
-    <widget class="QLabel" name="lblHeaderTitle">
-     <property name="font">
-      <font>
-       <family>DS-Digital</family>
-       <pointsize>18</pointsize>
-       <bold>true</bold>
-       <underline>true</underline>
-      </font>
-     </property>
-     <property name="text">
-      <string>TOKEN STATS &amp; CONSUMPTION ANALYTICS</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="layoutHeader">
+     <item>
+      <widget class="QLabel" name="lblHeaderTitle">
+       <property name="font">
+        <font><family>DS-Digital</family><pointsize>18</pointsize><bold>true</bold><underline>true</underline></font>
+       </property>
+       <property name="text"><string>TOKEN STATS &amp; CONSUMPTION ANALYTICS</string></property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacerHeader">
+       <property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property>
+       <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+      </spacer>
+     </item>
+     <!-- viewMode pill buttons -->
+     <item>
+      <widget class="QPushButton" name="btnViewByModel">
+       <property name="text"><string>By Model</string></property>
+       <property name="checkable"><bool>true</bool></property>
+       <property name="checked"><bool>true</bool></property>
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton { background-color: #0D6EFD; color: #FFFFFF; font-weight: bold; border: none;
+           border-radius: 4px 0 0 4px; padding: 5px 14px; font-size: 11px; }
+         QPushButton:!checked { background-color: #E2E8F0; color: #4A5568; }
+        </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnViewByAccount">
+       <property name="text"><string>By Account</string></property>
+       <property name="checkable"><bool>true</bool></property>
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton { background-color: #E2E8F0; color: #4A5568; font-weight: bold; border: none;
+           border-radius: 0 4px 4px 0; padding: 5px 14px; font-size: 11px; }
+         QPushButton:checked { background-color: #0D6EFD; color: #FFFFFF; }
+        </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblTimeframe">
+       <property name="text"><string>Timeframe:</string></property>
+       <property name="font"><font><bold>true</bold></font></property>
+       <property name="styleSheet"><string notr="true">margin-left: 12px;</string></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboTimeframe">
+       <item><property name="text"><string>Last 24 Hours (Hourly)</string></property></item>
+       <item><property name="text"><string>Last 7 Days (Daily)</string></property></item>
+       <item><property name="text"><string>Last 30 Days (Weekly)</string></property></item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnRefreshStats">
+       <property name="text"><string>Refresh</string></property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton { background-color: #28A745; color: #FFFFFF; font-weight: bold;
+          border: none; border-radius: 5px; padding: 5px 14px; font-size: 11px; }
+          QPushButton:hover { background-color: #218838; }
+          QPushButton:disabled { background-color: #A0AEC0; }
+        </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
+
+   <!-- Scroll body -->
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="styleSheet">
-      <string notr="true">
-       QScrollArea#scrollArea {
-         border: none;
-         background-color: transparent;
-       }
-       QScrollArea#scrollArea &gt; QWidget &gt; QWidget {
-         background-color: transparent;
-       }
-      </string>
+      <string notr="true">QScrollArea { background: transparent; border: none; }
+       QWidget#scrollContent { background: transparent; }</string>
      </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1018</width>
-        <height>680</height>
-       </rect>
-      </property>
+     <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+     <property name="widgetResizable"><bool>true</bool></property>
+     <widget class="QWidget" name="scrollContent">
+      <property name="geometry"><rect><x>0</x><y>0</y><width>1018</width><height>840</height></rect></property>
       <layout class="QVBoxLayout" name="layoutContent">
-       <property name="spacing">
-        <number>14</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
+       <property name="spacing"><number>14</number></property>
+       <property name="leftMargin"><number>0</number></property>
+       <property name="topMargin"><number>0</number></property>
+       <property name="rightMargin"><number>0</number></property>
+       <property name="bottomMargin"><number>0</number></property>
+
+       <!-- ROW 1: 6 Stat Cards -->
        <item>
         <layout class="QHBoxLayout" name="layoutStatsCards">
-         <property name="spacing">
-          <number>14</number>
-         </property>
+         <property name="spacing"><number>10</number></property>
+
+         <!-- Card 1: Total Tokens -->
          <item>
           <widget class="QFrame" name="cardTotalTokens">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardTotalTokens {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
+           <property name="styleSheet"><string notr="true">QFrame#cardTotalTokens { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string></property>
            <layout class="QVBoxLayout" name="layoutCard1">
-            <item>
-             <widget class="QLabel" name="lblCardTotalTokensTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Total Tokens</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valTotalTokens">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #111827;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>8</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
-             </widget>
-            </item>
+            <item><widget class="QLabel" name="lblCardTotalTokensTitle">
+             <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+             <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+             <property name="text"><string>Total Tokens</string></property>
+            </widget></item>
+            <item><widget class="QLCDNumber" name="valTotalTokens">
+             <property name="styleSheet"><string notr="true">color: #111827;</string></property>
+             <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+             <property name="digitCount"><number>10</number></property>
+             <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+            </widget></item>
            </layout>
           </widget>
          </item>
+
+         <!-- Card 2: Input Tokens -->
          <item>
           <widget class="QFrame" name="cardInputTokens">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardInputTokens {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
+           <property name="styleSheet"><string notr="true">QFrame#cardInputTokens { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string></property>
            <layout class="QVBoxLayout" name="layoutCard2">
-            <item>
-             <widget class="QLabel" name="lblCardInputTokensTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Input Tokens</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valInputTokens">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #0D6EFD;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>8</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
-             </widget>
-            </item>
+            <item><widget class="QLabel" name="lblCardInputTokensTitle">
+             <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+             <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+             <property name="text"><string>Input Tokens</string></property>
+            </widget></item>
+            <item><widget class="QLCDNumber" name="valInputTokens">
+             <property name="styleSheet"><string notr="true">color: #0D6EFD;</string></property>
+             <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+             <property name="digitCount"><number>10</number></property>
+             <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+            </widget></item>
            </layout>
           </widget>
          </item>
+
+         <!-- Card 3: Output Tokens -->
          <item>
           <widget class="QFrame" name="cardOutputTokens">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardOutputTokens {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
+           <property name="styleSheet"><string notr="true">QFrame#cardOutputTokens { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string></property>
            <layout class="QVBoxLayout" name="layoutCard3">
-            <item>
-             <widget class="QLabel" name="lblCardOutputTokensTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Output Tokens</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valOutputTokens">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #6F42C1;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>8</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
-             </widget>
-            </item>
+            <item><widget class="QLabel" name="lblCardOutputTokensTitle">
+             <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+             <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+             <property name="text"><string>Output Tokens</string></property>
+            </widget></item>
+            <item><widget class="QLCDNumber" name="valOutputTokens">
+             <property name="styleSheet"><string notr="true">color: #6F42C1;</string></property>
+             <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+             <property name="digitCount"><number>10</number></property>
+             <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+            </widget></item>
            </layout>
           </widget>
          </item>
+
+         <!-- Card 4: Cached Tokens -->
          <item>
           <widget class="QFrame" name="cardCachedTokens">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardCachedTokens {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
+           <property name="styleSheet"><string notr="true">QFrame#cardCachedTokens { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string></property>
            <layout class="QVBoxLayout" name="layoutCard4">
-            <item>
-             <widget class="QLabel" name="lblCardCachedTokensTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Cache Hits</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valCachedTokens">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #17A2B8;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>8</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
-             </widget>
-            </item>
+            <item><widget class="QLabel" name="lblCardCachedTokensTitle">
+             <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+             <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+             <property name="text"><string>Cache Hits</string></property>
+            </widget></item>
+            <item><widget class="QLCDNumber" name="valCachedTokens">
+             <property name="styleSheet"><string notr="true">color: #17A2B8;</string></property>
+             <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+             <property name="digitCount"><number>10</number></property>
+             <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+            </widget></item>
            </layout>
           </widget>
          </item>
+
+         <!-- Card 5: Active Accounts -->
          <item>
           <widget class="QFrame" name="cardActiveAccounts">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardActiveAccounts {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
+           <property name="styleSheet"><string notr="true">QFrame#cardActiveAccounts { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string></property>
            <layout class="QVBoxLayout" name="layoutCard5">
+            <item><widget class="QLabel" name="lblCardActiveAccountsTitle">
+             <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+             <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+             <property name="text"><string>Active Accounts</string></property>
+            </widget></item>
+            <item><widget class="QLCDNumber" name="valActiveAccounts">
+             <property name="styleSheet"><string notr="true">color: #28A745;</string></property>
+             <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+             <property name="digitCount"><number>6</number></property>
+             <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+            </widget></item>
+           </layout>
+          </widget>
+         </item>
+
+         <!-- Card 6: Models Used (MISSING — now added) -->
+         <item>
+          <widget class="QFrame" name="cardModelsUsed">
+           <property name="styleSheet"><string notr="true">QFrame#cardModelsUsed { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string></property>
+           <layout class="QVBoxLayout" name="layoutCard6">
+            <item><widget class="QLabel" name="lblCardModelsUsedTitle">
+             <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+             <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+             <property name="text"><string>Models Used</string></property>
+            </widget></item>
+            <item><widget class="QLCDNumber" name="valModelsUsed">
+             <property name="styleSheet"><string notr="true">color: #D97706;</string></property>
+             <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+             <property name="digitCount"><number>4</number></property>
+             <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+            </widget></item>
+           </layout>
+          </widget>
+         </item>
+
+        </layout>
+       </item>
+
+       <!-- ROW 2: Charts row — Stacked Area (trend) + Donut Pie (distribution) -->
+       <item>
+        <layout class="QHBoxLayout" name="layoutChartsRow">
+         <property name="spacing"><number>12</number></property>
+
+         <!-- Trend chart container (by model / by account stacked area) -->
+         <item>
+          <widget class="QGroupBox" name="groupTrendChart">
+           <property name="title"><string>Token Usage Trend</string></property>
+           <property name="styleSheet">
+            <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #E2E8F0;
+              border-radius: 8px; margin-top: 8px; padding: 12px; font-weight: bold; }
+              QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left;
+              padding: 0 6px; color: #2D3748; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutTrendChart">
+            <!-- Chart widget injected at runtime via token_stats_page.py -->
             <item>
-             <widget class="QLabel" name="lblCardActiveAccountsTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Active Accounts</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valActiveAccounts">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #28A745;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>6</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
+             <widget class="QWidget" name="placeholderTrendChart">
+              <property name="minimumHeight"><number>240</number></property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
+
+         <!-- Donut pie container (account distribution) -->
+         <item>
+          <widget class="QGroupBox" name="groupPieChart">
+           <property name="title"><string>Account Distribution</string></property>
+           <property name="maximumWidth"><number>320</number></property>
+           <property name="styleSheet">
+            <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #E2E8F0;
+              border-radius: 8px; margin-top: 8px; padding: 12px; font-weight: bold; }
+              QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left;
+              padding: 0 6px; color: #2D3748; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutPieChart">
+            <item>
+             <widget class="QWidget" name="placeholderPieChart">
+              <property name="minimumHeight"><number>200</number></property>
+             </widget>
+            </item>
+            <!-- Pie legend (top 5 accounts) — labels injected at runtime -->
+            <item>
+             <widget class="QWidget" name="pieLegendWidget">
+              <property name="minimumHeight"><number>40</number></property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+
         </layout>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="layoutPeriodFilter">
-         <item>
-          <widget class="QLabel" name="lblTimeframe">
-           <property name="font">
-            <font>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Timeframe:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboTimeframe">
-           <item>
-            <property name="text">
-             <string>Last 24 Hours (Hourly)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Last 7 Days (Daily)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Last 30 Days (Weekly)</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <spacer name="spacerPeriod">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnRefreshStats">
-           <property name="text">
-            <string>Refresh Statistics</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
+
+       <!-- ROW 3: By Model table (visible in "By Model" mode) -->
        <item>
         <widget class="QGroupBox" name="groupModelStats">
          <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>10</pointsize>
-           <bold>true</bold>
-          </font>
+          <font><family>Segoe UI</family><pointsize>10</pointsize><bold>true</bold></font>
          </property>
-         <property name="title">
-          <string>Token Consumption by Model</string>
+         <property name="title"><string>Token Consumption by Model</string></property>
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #E2E8F0;
+            border-radius: 8px; margin-top: 8px; padding: 12px; }
+            QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left;
+            padding: 0 6px; color: #2D3748; }</string>
          </property>
          <layout class="QVBoxLayout" name="layoutModelStats">
           <item>
            <widget class="QTableWidget" name="tableModelStats">
-            <property name="alternatingRowColors">
-             <bool>true</bool>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-            </property>
-            <property name="editTriggers">
-             <enum>QAbstractItemView::EditTrigger::NoEditTriggers</enum>
-            </property>
-            <property name="columnCount">
-             <number>7</number>
-            </property>
-            <column>
-             <property name="text">
-              <string>Model</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Requests</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Input Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Output Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Cached Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Total Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Share (%)</string>
-             </property>
-            </column>
+            <property name="alternatingRowColors"><bool>true</bool></property>
+            <property name="selectionBehavior"><enum>QAbstractItemView::SelectionBehavior::SelectRows</enum></property>
+            <property name="selectionMode"><enum>QAbstractItemView::SelectionMode::SingleSelection</enum></property>
+            <property name="editTriggers"><set>QAbstractItemView::EditTrigger::NoEditTriggers</set></property>
+            <property name="columnCount"><number>7</number></property>
+            <column><property name="text"><string>Model</string></property></column>
+            <column><property name="text"><string>Requests</string></property></column>
+            <column><property name="text"><string>Input Tokens</string></property></column>
+            <column><property name="text"><string>Uncached Input</string></property></column>
+            <column><property name="text"><string>Output Tokens</string></property></column>
+            <column><property name="text"><string>Cached Tokens</string></property></column>
+            <column><property name="text"><string>Share %</string></property></column>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
+
+       <!-- ROW 4: By Account table (visible in "By Account" mode) -->
        <item>
         <widget class="QGroupBox" name="groupAccountStats">
          <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>10</pointsize>
-           <bold>true</bold>
-          </font>
+          <font><family>Segoe UI</family><pointsize>10</pointsize><bold>true</bold></font>
          </property>
-         <property name="title">
-          <string>Token Consumption by Account</string>
+         <property name="title"><string>Token Consumption by Account</string></property>
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #E2E8F0;
+            border-radius: 8px; margin-top: 8px; padding: 12px; }
+            QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left;
+            padding: 0 6px; color: #2D3748; }</string>
          </property>
          <layout class="QVBoxLayout" name="layoutAccountStats">
           <item>
            <widget class="QTableWidget" name="tableAccountStats">
-            <property name="alternatingRowColors">
-             <bool>true</bool>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-            </property>
-            <property name="editTriggers">
-             <enum>QAbstractItemView::EditTrigger::NoEditTriggers</enum>
-            </property>
-            <property name="columnCount">
-             <number>6</number>
-            </property>
-            <column>
-             <property name="text">
-              <string>Account Email</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Requests</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Input Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Output Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Cached Tokens</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Total Tokens</string>
-             </property>
-            </column>
+            <property name="alternatingRowColors"><bool>true</bool></property>
+            <property name="selectionBehavior"><enum>QAbstractItemView::SelectionBehavior::SelectRows</enum></property>
+            <property name="selectionMode"><enum>QAbstractItemView::SelectionMode::SingleSelection</enum></property>
+            <property name="editTriggers"><set>QAbstractItemView::EditTrigger::NoEditTriggers</set></property>
+            <property name="columnCount"><number>7</number></property>
+            <column><property name="text"><string>Account Email</string></property></column>
+            <column><property name="text"><string>Requests</string></property></column>
+            <column><property name="text"><string>Input Tokens</string></property></column>
+            <column><property name="text"><string>Uncached Input</string></property></column>
+            <column><property name="text"><string>Output Tokens</string></property></column>
+            <column><property name="text"><string>Cached Tokens</string></property></column>
+            <column><property name="text"><string>Share %</string></property></column>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
+
       </layout>
      </widget>
     </widget>
    </item>
+
   </layout>
  </widget>
  <resources/>

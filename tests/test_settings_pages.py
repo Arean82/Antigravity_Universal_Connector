@@ -193,17 +193,34 @@ class TestNativeSettingsPages(unittest.TestCase):
         self.assertIsNotNone(page.form_widget)
         self.assertEqual(page.form_widget.windowTitle(), "Token Stats")
 
-        # Verify QLCDNumber widgets exist
+        # Verify all 6 QLCDNumber widgets exist
         self.assertIsNotNone(page.val_total_tokens)
         self.assertIsNotNone(page.val_input_tokens)
         self.assertIsNotNone(page.val_output_tokens)
         self.assertIsNotNone(page.val_cached_tokens)
         self.assertIsNotNone(page.val_active_accounts)
+        self.assertIsNotNone(page.val_models_used)  # 6th card
 
-        # Test loading config and tables
-        page.load_from_config()
-        self.assertGreaterEqual(page.table_model_stats.rowCount(), 3)
+        # Verify viewMode toggle buttons exist
+        self.assertIsNotNone(page.btn_view_by_model)
+        self.assertIsNotNone(page.btn_view_by_account)
+
+        # Verify both tables exist with correct column counts
+        self.assertIsNotNone(page.table_model_stats)
         self.assertIsNotNone(page.table_account_stats)
+        self.assertEqual(page.table_model_stats.columnCount(), 7)
+        self.assertEqual(page.table_account_stats.columnCount(), 7)
+
+        # Test loading (dynamic rows based on DB quota_json)
+        page.load_from_config()
+        self.assertGreaterEqual(page.table_model_stats.rowCount(), 0)
+        self.assertGreaterEqual(page.table_account_stats.rowCount(), 0)
+
+        # Test viewMode toggle
+        page._set_view_mode(TokenStatsPage.VIEW_BY_ACCOUNT)
+        self.assertEqual(page._view_mode, TokenStatsPage.VIEW_BY_ACCOUNT)
+        page._set_view_mode(TokenStatsPage.VIEW_BY_MODEL)
+        self.assertEqual(page._view_mode, TokenStatsPage.VIEW_BY_MODEL)
 
     def test_dashboard_page_direct_ui(self):
         page = DashboardPage()

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1100</width>
-    <height>820</height>
+    <height>950</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,20 +36,21 @@
    <property name="bottomMargin">
     <number>16</number>
    </property>
+
+   <!-- ROW 1: Greeting + Action Buttons + Proxy Controls -->
    <item>
     <layout class="QHBoxLayout" name="layoutTopHeader">
      <item>
-      <widget class="QLabel" name="lblHeaderTitle">
+      <widget class="QLabel" name="lblGreeting">
        <property name="font">
         <font>
-         <family>DS-Digital</family>
-         <pointsize>18</pointsize>
+         <family>Segoe UI</family>
+         <pointsize>16</pointsize>
          <bold>true</bold>
-         <underline>true</underline>
         </font>
        </property>
        <property name="text">
-        <string>DASHBOARD &amp; PROXY GATEWAY TELEMETRY</string>
+        <string>Hello!</string>
        </property>
       </widget>
      </item>
@@ -65,6 +66,49 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnRefreshQuota">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton {
+           background-color: #0D6EFD;
+           color: #FFFFFF;
+           font-weight: bold;
+           border: none;
+           border-radius: 5px;
+           padding: 6px 14px;
+           font-size: 11px;
+         }
+         QPushButton:hover { background-color: #0B5ED7; }
+         QPushButton:disabled { background-color: #A0AEC0; }
+        </string>
+       </property>
+       <property name="text">
+        <string>Refresh Quota</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnExportData">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton {
+           background-color: #6F42C1;
+           color: #FFFFFF;
+           font-weight: bold;
+           border: none;
+           border-radius: 5px;
+           padding: 6px 14px;
+           font-size: 11px;
+         }
+         QPushButton:hover { background-color: #5A32A3; }
+        </string>
+       </property>
+       <property name="text">
+        <string>Export Data</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="lblProxyBadge">
@@ -100,9 +144,7 @@
            padding: 6px 14px;
            font-size: 11px;
          }
-         QPushButton:hover {
-           background-color: #0B5ED7;
-         }
+         QPushButton:hover { background-color: #0B5ED7; }
         </string>
        </property>
        <property name="text">
@@ -112,479 +154,883 @@
      </item>
     </layout>
    </item>
+
+   <!-- ROW 2: 7 Stat Cards (Health classification + Gateway stats) -->
+   <item>
+    <layout class="QHBoxLayout" name="layoutStatsCards">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+
+     <!-- Card: Total Accounts -->
+     <item>
+      <widget class="QFrame" name="cardTotalAccounts">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardTotalAccounts { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardTotal">
+        <item>
+         <widget class="QLabel" name="lblCardTotalTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Total Accounts</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valTotalAccounts">
+          <property name="styleSheet"><string notr="true">color: #4A5568;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>4</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardTotalBadge">
+          <property name="styleSheet"><string notr="true">background-color: #E2E8F0; color: #4A5568; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>TOTAL</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+     <!-- Card: Active Accounts -->
+     <item>
+      <widget class="QFrame" name="cardActiveAccounts">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardActiveAccounts { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardActive">
+        <item>
+         <widget class="QLabel" name="lblCardActiveTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Active Accounts</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valActiveAccounts">
+          <property name="styleSheet"><string notr="true">color: #28A745;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>4</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardActiveBadge">
+          <property name="styleSheet"><string notr="true">background-color: #C6F6D5; color: #276749; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>ACTIVE</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+     <!-- Card: Disabled Accounts -->
+     <item>
+      <widget class="QFrame" name="cardDisabledAccounts">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardDisabledAccounts { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardDisabled">
+        <item>
+         <widget class="QLabel" name="lblCardDisabledTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Disabled</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valDisabledAccounts">
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>4</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardDisabledBadge">
+          <property name="styleSheet"><string notr="true">background-color: #E2E8F0; color: #4A5568; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>DISABLED</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+     <!-- Card: Abnormal/Risk Accounts -->
+     <item>
+      <widget class="QFrame" name="cardAbnormalAccounts">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardAbnormalAccounts { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardRisk">
+        <item>
+         <widget class="QLabel" name="lblCardRiskTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Abnormal</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valAbnormalAccounts">
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>4</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardRiskBadge">
+          <property name="styleSheet"><string notr="true">background-color: #E2E8F0; color: #4A5568; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>RISK</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+     <!-- Card: Proxy Port -->
+     <item>
+      <widget class="QFrame" name="cardProxyPort">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardProxyPort { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardPort">
+        <item>
+         <widget class="QLabel" name="lblCardProxyPortTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Proxy Port</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valProxyPort">
+          <property name="styleSheet"><string notr="true">color: #0D6EFD;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>6</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardPortBadge">
+          <property name="styleSheet"><string notr="true">background-color: #EBF8FF; color: #2B6CB0; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>PORT</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+     <!-- Card: Total Tokens -->
+     <item>
+      <widget class="QFrame" name="cardTotalTokens">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardTotalTokens { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardTokens">
+        <item>
+         <widget class="QLabel" name="lblCardTotalTokensTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Tokens Used</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valTotalTokens">
+          <property name="styleSheet"><string notr="true">color: #805AD5;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>8</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardTokensBadge">
+          <property name="styleSheet"><string notr="true">background-color: #FAF5FF; color: #553C9A; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>TOKENS</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+     <!-- Card: Total Requests -->
+     <item>
+      <widget class="QFrame" name="cardTotalRequests">
+       <property name="styleSheet">
+        <string notr="true">QFrame#cardTotalRequests { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; }</string>
+       </property>
+       <layout class="QVBoxLayout" name="layoutCardRequests">
+        <item>
+         <widget class="QLabel" name="lblCardRequestsTitle">
+          <property name="font"><font><family>DS-Digital</family><pointsize>10</pointsize><bold>true</bold></font></property>
+          <property name="styleSheet"><string notr="true">color: #718096;</string></property>
+          <property name="text"><string>Requests</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="valTotalRequests">
+          <property name="styleSheet"><string notr="true">color: #17A2B8;</string></property>
+          <property name="frameShape"><enum>QFrame::Shape::NoFrame</enum></property>
+          <property name="digitCount"><number>8</number></property>
+          <property name="segmentStyle"><enum>QLCDNumber::SegmentStyle::Flat</enum></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblCardRequestsBadge">
+          <property name="styleSheet"><string notr="true">background-color: #E6FFFA; color: #234E52; border-radius: 4px; padding: 2px 6px; font-size: 9px; font-weight: bold;</string></property>
+          <property name="text"><string>ROUTED</string></property>
+          <property name="alignment"><set>Qt::AlignmentFlag::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+
+    </layout>
+   </item>
+
+   <!-- SCROLLABLE BODY -->
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="styleSheet">
-      <string notr="true">
-       QScrollArea#scrollArea {
-         border: none;
-         background-color: transparent;
-       }
-       QScrollArea#scrollArea &gt; QWidget &gt; QWidget {
-         background-color: transparent;
-       }
-      </string>
+      <string notr="true">QScrollArea { background: transparent; border: none; } QWidget#scrollContent { background: transparent; }</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
+     <widget class="QWidget" name="scrollContent">
       <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1068</width>
-        <height>750</height>
-       </rect>
+       <rect><x>0</x><y>0</y><width>1060</width><height>800</height></rect>
       </property>
-      <layout class="QVBoxLayout" name="layoutContent">
-       <property name="spacing">
-        <number>14</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
+      <layout class="QVBoxLayout" name="layoutScrollBody">
+       <property name="spacing"><number>14</number></property>
+       <property name="leftMargin"><number>0</number></property>
+       <property name="topMargin"><number>0</number></property>
+       <property name="rightMargin"><number>0</number></property>
+       <property name="bottomMargin"><number>0</number></property>
+
+       <!-- SECTION: Quota Productivity Matrix with Double Pill Capsule -->
        <item>
-        <layout class="QHBoxLayout" name="layoutStatsCards">
-         <property name="spacing">
-          <number>14</number>
+        <widget class="QGroupBox" name="groupQuotaMatrix">
+         <property name="styleSheet">
+          <string notr="true">
+           QGroupBox#groupQuotaMatrix {
+             background-color: #FFFFFF;
+             border: 1px solid #DCE1E7;
+             border-radius: 8px;
+             margin-top: 8px;
+             padding: 14px 12px 14px 12px;
+             font-weight: bold;
+           }
+           QGroupBox#groupQuotaMatrix::title {
+             subcontrol-origin: margin;
+             subcontrol-position: top left;
+             padding: 0 6px;
+             color: #2D3748;
+           }
+          </string>
          </property>
-         <item>
-          <widget class="QFrame" name="cardActiveAccounts">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardActiveAccounts {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
-           <layout class="QVBoxLayout" name="layoutCard1">
+         <property name="title">
+          <string>Quota Productivity Matrix</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutQuotaMatrixInner">
+          <property name="spacing"><number>12</number></property>
+
+          <!-- Dynamic Header & Capsule Pills -->
+          <item>
+           <layout class="QHBoxLayout" name="layoutMatrixHeader">
             <item>
-             <widget class="QLabel" name="lblCardActiveAccountsTitle">
+             <widget class="QLabel" name="lblQuotaMatrixTitle">
               <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
+               <font><family>Segoe UI</family><pointsize>11</pointsize><bold>true</bold></font>
               </property>
               <property name="text">
-               <string>Active Pooled Accounts</string>
+               <string>Available Accounts Quota Productivity Matrix</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLCDNumber" name="valActiveAccounts">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="lblPoolCountBadge">
               <property name="styleSheet">
-               <string notr="true">color: #28A745;</string>
+               <string notr="true">color: #718096; font-size: 11px; font-family: monospace;</string>
               </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
+              <property name="text">
+               <string>(Pool: 0)</string>
               </property>
-              <property name="digitCount">
-               <number>6</number>
+             </widget>
+            </item>
+            <item>
+             <spacer name="spacerMatrixHeader">
+              <property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property>
+              <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+             </spacer>
+            </item>
+            <!-- Pill Capsule Controller -->
+            <item>
+             <widget class="QPushButton" name="btnOnlyAvailable">
+              <property name="text"><string>Available (0)</string></property>
+              <property name="checkable"><bool>true</bool></property>
+              <property name="checked"><bool>true</bool></property>
+              <property name="styleSheet">
+               <string notr="true">
+                QPushButton { background-color: #28A745; color: #FFFFFF; font-weight: bold; border: none; border-radius: 4px 0 0 4px; padding: 5px 12px; font-size: 11px; }
+                QPushButton:!checked { background-color: #E2E8F0; color: #4A5568; }
+               </string>
               </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnIncludeDisabled">
+              <property name="text"><string>Include Disabled (0)</string></property>
+              <property name="checkable"><bool>true</bool></property>
+              <property name="styleSheet">
+               <string notr="true">
+                QPushButton { background-color: #E2E8F0; color: #4A5568; font-weight: bold; border: none; border-radius: 0 4px 4px 0; padding: 5px 12px; font-size: 11px; }
+                QPushButton:checked { background-color: #0D6EFD; color: #FFFFFF; }
+               </string>
               </property>
              </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="cardProxyPort">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardProxyPort {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
-           <layout class="QVBoxLayout" name="layoutCard2">
+          </item>
+
+          <!-- 3 Model Quota Metric Cards -->
+          <item>
+           <layout class="QHBoxLayout" name="layoutModelCards">
+            <property name="spacing"><number>12</number></property>
+
+            <!-- Card 1: Gemini Text -->
             <item>
-             <widget class="QLabel" name="lblCardProxyPortTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QFrame" name="cardGeminiText">
               <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
+               <string notr="true">QFrame#cardGeminiText { background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string>
               </property>
-              <property name="text">
-               <string>Proxy Port</string>
-              </property>
+              <layout class="QVBoxLayout" name="layoutGeminiText">
+               <item>
+                <layout class="QHBoxLayout" name="layoutGTHead">
+                 <item>
+                  <widget class="QLabel" name="lblGTTitle">
+                   <property name="text"><string>Gemini Text Quota</string></property>
+                   <property name="font"><font><pointsize>10</pointsize><bold>true</bold></font></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                 <item>
+                  <widget class="QLabel" name="lblGTBadge">
+                   <property name="text"><string>Sufficient</string></property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: #C6F6D5; color: #22543D; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: bold;</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layoutGTVal">
+                 <item>
+                  <widget class="QLabel" name="valGTWeighted">
+                   <property name="text"><string>100%</string></property>
+                   <property name="font"><font><pointsize>22</pointsize><bold>true</bold></font></property>
+                   <property name="styleSheet"><string notr="true">color: #2D3748;</string></property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblGTWeightedSub">
+                   <property name="text"><string>Weighted Effective</string></property>
+                   <property name="styleSheet"><string notr="true">color: #718096; font-size: 10px;</string></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layoutGTFoot">
+                 <item>
+                  <widget class="QLabel" name="lblGT5h">
+                   <property name="text"><string>5H Rolling: 100%</string></property>
+                   <property name="styleSheet"><string notr="true">color: #28A745; font-size: 10px; font-weight: bold;</string></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                 <item>
+                  <widget class="QLabel" name="lblGTWeekly">
+                   <property name="text"><string>7D Weekly: 100%</string></property>
+                   <property name="styleSheet"><string notr="true">color: #4A5568; font-size: 10px; font-weight: bold;</string></property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="lblGTWarning">
+                 <property name="text"><string></string></property>
+                 <property name="styleSheet"><string notr="true">color: #DC3545; font-size: 9px; font-weight: bold;</string></property>
+                 <property name="wordWrap"><bool>true</bool></property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
+
+            <!-- Card 2: Gemini Image -->
             <item>
-             <widget class="QLCDNumber" name="valProxyPort">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QFrame" name="cardGeminiImage">
               <property name="styleSheet">
-               <string notr="true">color: #0D6EFD;</string>
+               <string notr="true">QFrame#cardGeminiImage { background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string>
               </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>6</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
+              <layout class="QVBoxLayout" name="layoutGeminiImage">
+               <item>
+                <layout class="QHBoxLayout" name="layoutGIHead">
+                 <item>
+                  <widget class="QLabel" name="lblGITitle">
+                   <property name="text"><string>Gemini Image Quota</string></property>
+                   <property name="font"><font><pointsize>10</pointsize><bold>true</bold></font></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                 <item>
+                  <widget class="QLabel" name="lblGIBadge">
+                   <property name="text"><string>Sufficient</string></property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: #E9D8FD; color: #44337A; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: bold;</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layoutGIVal">
+                 <item>
+                  <widget class="QLabel" name="valGIWeighted">
+                   <property name="text"><string>100%</string></property>
+                   <property name="font"><font><pointsize>22</pointsize><bold>true</bold></font></property>
+                   <property name="styleSheet"><string notr="true">color: #2D3748;</string></property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblGIWeightedSub">
+                   <property name="text"><string>Weighted Effective</string></property>
+                   <property name="styleSheet"><string notr="true">color: #718096; font-size: 10px;</string></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layoutGIFoot">
+                 <item>
+                  <widget class="QLabel" name="lblGI5h">
+                   <property name="text"><string>5H Rolling: 100%</string></property>
+                   <property name="styleSheet"><string notr="true">color: #28A745; font-size: 10px; font-weight: bold;</string></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                 <item>
+                  <widget class="QLabel" name="lblGIWeekly">
+                   <property name="text"><string>7D Weekly: 100%</string></property>
+                   <property name="styleSheet"><string notr="true">color: #4A5568; font-size: 10px; font-weight: bold;</string></property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="lblGIWarning">
+                 <property name="text"><string></string></property>
+                 <property name="styleSheet"><string notr="true">color: #DC3545; font-size: 9px; font-weight: bold;</string></property>
+                 <property name="wordWrap"><bool>true</bool></property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
+
+            <!-- Card 3: Claude Quota -->
+            <item>
+             <widget class="QFrame" name="cardClaude">
+              <property name="styleSheet">
+               <string notr="true">QFrame#cardClaude { background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutClaude">
+               <item>
+                <layout class="QHBoxLayout" name="layoutClaudeHead">
+                 <item>
+                  <widget class="QLabel" name="lblClaudeTitle">
+                   <property name="text"><string>Claude Available Quota</string></property>
+                   <property name="font"><font><pointsize>10</pointsize><bold>true</bold></font></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                 <item>
+                  <widget class="QLabel" name="lblClaudeBadge">
+                   <property name="text"><string>Sufficient</string></property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: #BEE3F8; color: #2A4365; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: bold;</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layoutClaudeVal">
+                 <item>
+                  <widget class="QLabel" name="valClaudeWeighted">
+                   <property name="text"><string>100%</string></property>
+                   <property name="font"><font><pointsize>22</pointsize><bold>true</bold></font></property>
+                   <property name="styleSheet"><string notr="true">color: #2D3748;</string></property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblClaudeWeightedSub">
+                   <property name="text"><string>Weighted Effective</string></property>
+                   <property name="styleSheet"><string notr="true">color: #718096; font-size: 10px;</string></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layoutClaudeFoot">
+                 <item>
+                  <widget class="QLabel" name="lblClaude5h">
+                   <property name="text"><string>5H Rolling: 100%</string></property>
+                   <property name="styleSheet"><string notr="true">color: #28A745; font-size: 10px; font-weight: bold;</string></property>
+                  </widget>
+                 </item>
+                 <item><spacer><property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property></spacer></item>
+                 <item>
+                  <widget class="QLabel" name="lblClaudeWeekly">
+                   <property name="text"><string>7D Weekly: 100%</string></property>
+                   <property name="styleSheet"><string notr="true">color: #4A5568; font-size: 10px; font-weight: bold;</string></property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="lblClaudeWarning">
+                 <property name="text"><string></string></property>
+                 <property name="styleSheet"><string notr="true">color: #DC3545; font-size: 9px; font-weight: bold;</string></property>
+                 <property name="wordWrap"><bool>true</bool></property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="cardTotalTokens">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardTotalTokens {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
-           <layout class="QVBoxLayout" name="layoutCard3">
-            <item>
-             <widget class="QLabel" name="lblCardTotalTokensTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Tokens Consumed</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valTotalTokens">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #6F42C1;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>8</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="cardTotalRequests">
-           <property name="styleSheet">
-            <string notr="true">
-             QFrame#cardTotalRequests {
-               background-color: #FFFFFF;
-               border: 1px solid #E2E8F0;
-               border-radius: 8px;
-               padding: 12px;
-             }
-            </string>
-           </property>
-           <layout class="QVBoxLayout" name="layoutCard4">
-            <item>
-             <widget class="QLabel" name="lblCardTotalRequestsTitle">
-              <property name="font">
-               <font>
-                <family>DS-Digital</family>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #718096;</string>
-              </property>
-              <property name="text">
-               <string>Routed Requests</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="valTotalRequests">
-              <property name="font">
-               <font>
-                <pointsize>18</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: #17A2B8;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::NoFrame</enum>
-              </property>
-              <property name="digitCount">
-               <number>6</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::SegmentStyle::Flat</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
+          </item>
+
+         </layout>
+        </widget>
        </item>
+
+       <!-- SECTION: Quick Connect URLs -->
        <item>
         <widget class="QGroupBox" name="groupQuickConnect">
-         <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>10</pointsize>
-           <bold>true</bold>
-          </font>
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 8px; margin-top: 8px; padding: 14px 12px 12px 12px; font-weight: bold; } QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 6px; color: #2D3748; }</string>
          </property>
          <property name="title">
           <string>Universal Gateway Quick-Connect</string>
          </property>
-         <layout class="QFormLayout" name="layoutFormConnect">
-          <property name="horizontalSpacing">
-           <number>16</number>
-          </property>
-          <property name="verticalSpacing">
-           <number>10</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblOpenAiUrlTitle">
-            <property name="text">
-             <string>OpenAI Base URL:</string>
-            </property>
+         <layout class="QHBoxLayout" name="layoutQuickConnect">
+          <property name="spacing"><number>12</number></property>
+          <item>
+           <widget class="QLabel" name="lblOpenAiLabel">
+            <property name="text"><string>OpenAI Base URL:</string></property>
+            <property name="font"><font><pointsize>9</pointsize></font></property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="layoutOpenAi">
-            <item>
-             <widget class="QLineEdit" name="editOpenAiUrl">
-              <property name="text">
-               <string>http://127.0.0.1:8045/v1</string>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnCopyOpenAi">
-              <property name="text">
-               <string>Copy</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lblClaudeUrlTitle">
-            <property name="text">
-             <string>Claude Messages URL:</string>
-            </property>
+          <item>
+           <widget class="QLineEdit" name="editOpenAiUrl">
+            <property name="readOnly"><bool>true</bool></property>
+            <property name="text"><string>http://127.0.0.1:8045/v1</string></property>
+            <property name="minimumWidth"><number>220</number></property>
+            <property name="styleSheet"><string notr="true">font-family: monospace; font-size: 11px;</string></property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout" name="layoutClaude">
-            <item>
-             <widget class="QLineEdit" name="editClaudeUrl">
-              <property name="text">
-               <string>http://127.0.0.1:8045/v1/messages</string>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnCopyClaude">
-              <property name="text">
-               <string>Copy</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item>
+           <widget class="QPushButton" name="btnCopyOpenAi">
+            <property name="text"><string>Copy</string></property>
+            <property name="styleSheet"><string notr="true">padding: 4px 10px; font-size: 11px;</string></property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacerQC">
+            <property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property>
+            <property name="sizeHint" stdset="0"><size><width>20</width><height>20</height></size></property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblClaudeLabel">
+            <property name="text"><string>Claude Messages URL:</string></property>
+            <property name="font"><font><pointsize>9</pointsize></font></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="editClaudeUrl">
+            <property name="readOnly"><bool>true</bool></property>
+            <property name="text"><string>http://127.0.0.1:8045/v1/messages</string></property>
+            <property name="minimumWidth"><number>240</number></property>
+            <property name="styleSheet"><string notr="true">font-family: monospace; font-size: 11px;</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnCopyClaude">
+            <property name="text"><string>Copy</string></property>
+            <property name="styleSheet"><string notr="true">padding: 4px 10px; font-size: 11px;</string></property>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
+
+       <!-- SECTION: Two-column layout — Current Account + Best Accounts -->
+       <item>
+        <layout class="QHBoxLayout" name="layoutTwoColumn">
+         <property name="spacing"><number>12</number></property>
+
+         <!-- Current Account Panel -->
+         <item>
+          <widget class="QGroupBox" name="groupCurrentAccount">
+           <property name="styleSheet">
+            <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 8px; margin-top: 8px; padding: 14px 12px 12px 12px; font-weight: bold; } QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 6px; color: #2D3748; }</string>
+           </property>
+           <property name="title">
+            <string>Current Active Account</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutCurrentAccount">
+            <property name="spacing"><number>8</number></property>
+            <item>
+             <widget class="QLabel" name="lblCurrentEmail">
+              <property name="text"><string>No account active</string></property>
+              <property name="styleSheet"><string notr="true">font-size: 12px; font-weight: bold; color: #2D3748;</string></property>
+              <property name="wordWrap"><bool>true</bool></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblCurrentTier">
+              <property name="text"><string>Tier: —</string></property>
+              <property name="styleSheet"><string notr="true">font-size: 11px; color: #718096;</string></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblCurrentQuota">
+              <property name="text"><string>Quota: —</string></property>
+              <property name="styleSheet"><string notr="true">font-size: 11px; color: #718096;</string></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblCurrentStatus">
+              <property name="text"><string>Status: —</string></property>
+              <property name="styleSheet"><string notr="true">font-size: 11px; color: #718096;</string></property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="spacerCurrentAcc">
+              <property name="orientation"><enum>Qt::Orientation::Vertical</enum></property>
+              <property name="sizeHint" stdset="0"><size><width>20</width><height>10</height></size></property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+
+         <!-- Best Accounts Panel -->
+         <item>
+          <widget class="QGroupBox" name="groupBestAccounts">
+           <property name="styleSheet">
+            <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 8px; margin-top: 8px; padding: 14px 12px 12px 12px; font-weight: bold; } QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 6px; color: #2D3748; }</string>
+           </property>
+           <property name="title">
+            <string>Best Accounts by Quota</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutBestAccounts">
+            <property name="spacing"><number>4</number></property>
+            <item>
+             <widget class="QTableWidget" name="tableBestAccounts">
+              <property name="styleSheet">
+               <string notr="true">
+                QTableWidget { border: none; background: transparent; gridline-color: #E2E8F0; font-size: 11px; }
+                QHeaderView::section { background-color: #F7FAFC; border: none; border-bottom: 1px solid #E2E8F0; padding: 4px 8px; font-weight: bold; font-size: 10px; color: #4A5568; }
+               </string>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+              </property>
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <column>
+               <property name="text"><string>Email</string></property>
+              </column>
+              <column>
+               <property name="text"><string>Tier</string></property>
+              </column>
+              <column>
+               <property name="text"><string>Quota %</string></property>
+              </column>
+              <column>
+               <property name="text"><string>Action</string></property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+
+        </layout>
+       </item>
+
+       <!-- SECTION: Quick Links Row (View All Accounts + Export Data) -->
+       <item>
+        <layout class="QHBoxLayout" name="layoutQuickLinks">
+         <property name="spacing"><number>12</number></property>
+         <item>
+          <widget class="QPushButton" name="btnViewAllAccounts">
+           <property name="text"><string>➔ View All Accounts &amp; Settings</string></property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+               background-color: #EEF2FF;
+               color: #4338CA;
+               font-weight: bold;
+               border: 1px solid #C7D2FE;
+               border-radius: 6px;
+               padding: 8px 16px;
+               font-size: 11px;
+               text-align: left;
+             }
+             QPushButton:hover { background-color: #E0E7FF; }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnExportDataBottom">
+           <property name="text"><string>⬇ Export Accounts Data (JSON)</string></property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+               background-color: #FAF5FF;
+               color: #6B21A8;
+               font-weight: bold;
+               border: 1px solid #E9D8FD;
+               border-radius: 6px;
+               padding: 8px 16px;
+               font-size: 11px;
+               text-align: left;
+             }
+             QPushButton:hover { background-color: #F3E8FF; }
+            </string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+
+       <!-- SECTION: Account Pool Table & Load Balancing -->
        <item>
         <widget class="QGroupBox" name="groupAccountPool">
-         <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>10</pointsize>
-           <bold>true</bold>
-          </font>
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { background-color: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 8px; margin-top: 8px; padding: 14px 12px 12px 12px; font-weight: bold; } QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 6px; color: #2D3748; }</string>
          </property>
          <property name="title">
           <string>Google Account Pool &amp; Load Balancing</string>
          </property>
-         <layout class="QVBoxLayout" name="layoutAccountPool">
+         <layout class="QVBoxLayout" name="layoutPool">
+          <property name="spacing"><number>8</number></property>
           <item>
            <layout class="QHBoxLayout" name="layoutPoolActions">
             <item>
              <widget class="QPushButton" name="btnImportVscdb">
+              <property name="text"><string>1-Click Import from Antigravity</string></property>
               <property name="styleSheet">
-               <string notr="true">
-                background-color: #28A745;
-                color: #FFFFFF;
-                font-weight: bold;
-                padding: 6px 14px;
-                border-radius: 5px;
-               </string>
-              </property>
-              <property name="text">
-               <string>1-Click Import from Antigravity</string>
+               <string notr="true">QPushButton { background-color: #28A745; color: #FFFFFF; font-weight: bold; border: none; border-radius: 5px; padding: 6px 14px; font-size: 11px; } QPushButton:hover { background-color: #218838; }</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btnAddAccount">
+              <property name="text"><string>Add Account</string></property>
               <property name="styleSheet">
-               <string notr="true">
-                background-color: #0D6EFD;
-                color: #FFFFFF;
-                font-weight: bold;
-                padding: 6px 14px;
-                border-radius: 5px;
-               </string>
-              </property>
-              <property name="text">
-               <string>Add Google Account</string>
+               <string notr="true">QPushButton { background-color: #0D6EFD; color: #FFFFFF; font-weight: bold; border: none; border-radius: 5px; padding: 6px 14px; font-size: 11px; } QPushButton:hover { background-color: #0B5ED7; }</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btnRefreshAccounts">
-              <property name="text">
-               <string>Refresh Accounts</string>
+              <property name="text"><string>Refresh List</string></property>
+              <property name="styleSheet">
+               <string notr="true">padding: 6px 14px; font-size: 11px;</string>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="spacerPool">
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
+             <spacer name="spacerPoolActions">
+              <property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property>
+              <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
              </spacer>
             </item>
            </layout>
           </item>
           <item>
            <widget class="QTableWidget" name="tableAccounts">
-            <property name="alternatingRowColors">
-             <bool>true</bool>
+            <property name="styleSheet">
+             <string notr="true">
+              QTableWidget { border: none; background: transparent; gridline-color: #E2E8F0; font-size: 11px; }
+              QHeaderView::section { background-color: #F7FAFC; border: none; border-bottom: 1px solid #E2E8F0; padding: 4px 8px; font-weight: bold; font-size: 10px; color: #4A5568; }
+             </string>
             </property>
             <property name="selectionBehavior">
              <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
             </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-            </property>
             <property name="editTriggers">
-             <enum>QAbstractItemView::EditTrigger::NoEditTriggers</enum>
+             <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
             </property>
-            <property name="columnCount">
-             <number>6</number>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
             </property>
             <column>
-             <property name="text">
-              <string>Active</string>
-             </property>
+             <property name="text"><string>Status</string></property>
             </column>
             <column>
-             <property name="text">
-              <string>Email</string>
-             </property>
+             <property name="text"><string>Email</string></property>
             </column>
             <column>
-             <property name="text">
-              <string>Name</string>
-             </property>
+             <property name="text"><string>Name</string></property>
             </column>
             <column>
-             <property name="text">
-              <string>Tier</string>
-             </property>
+             <property name="text"><string>Tier</string></property>
             </column>
             <column>
-             <property name="text">
-              <string>Status</string>
-             </property>
+             <property name="text"><string>Quota</string></property>
             </column>
             <column>
-             <property name="text">
-              <string>Actions</string>
-             </property>
+             <property name="text"><string>Actions</string></property>
             </column>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
+
       </layout>
      </widget>
     </widget>
    </item>
+
   </layout>
  </widget>
- <resources/>
- <connections/>
 </ui>
